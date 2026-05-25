@@ -13,439 +13,287 @@
 
         body {
             font-family: 'Georgia', serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #f5f5f5;
             min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
+            padding: 40px 20px;
         }
 
         .container {
-            max-width: 600px;
-            width: 100%;
-            text-align: center;
+            max-width: 700px;
+            margin: 0 auto;
         }
 
         h1 {
-            color: white;
-            margin-bottom: 30px;
-            font-size: 2.5rem;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            font-size: 2rem;
+            text-align: center;
+            margin-bottom: 40px;
+            color: #333;
         }
 
         .card-container {
             background: white;
-            border-radius: 20px;
             padding: 40px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .card-container:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 50px rgba(0,0,0,0.4);
+            border-radius: 0;
+            box-shadow: none;
+            border-left: 3px solid #333;
         }
 
         .card-title {
-            color: #667eea;
-            font-size: 1.2rem;
-            margin-bottom: 20px;
+            font-size: 0.9rem;
             text-transform: uppercase;
             letter-spacing: 2px;
+            color: #666;
+            margin-bottom: 20px;
         }
 
         .card-question {
-            font-size: 1.8rem;
-            color: #2d3748;
-            margin-bottom: 30px;
+            font-size: 1.5rem;
             line-height: 1.6;
-            font-weight: 500;
+            margin-bottom: 30px;
+            color: #222;
         }
 
         .card-source {
             font-style: italic;
-            color: #718096;
-            margin-bottom: 30px;
-            font-size: 0.9rem;
+            color: #888;
+            margin-bottom: 40px;
+            font-size: 0.95rem;
         }
 
-        .card-reflection {
-            background: #f7fafc;
-            border-left: 4px solid #667eea;
-            padding: 20px;
-            text-align: left;
-            margin-bottom: 30px;
-            border-radius: 0 8px 8px 0;
+        .card-response {
+            padding: 30px;
+            background: #f9f9f9;
+            border-top: 1px solid #ddd;
+            border-bottom: 1px solid #ddd;
+            margin: 30px 0;
         }
 
-        .card-reflection h4 {
-            color: #667eea;
-            margin-bottom: 10px;
+        .card-response h3 {
             font-size: 1rem;
+            color: #444;
+            margin-bottom: 15px;
         }
 
-        .card-reflection p {
-            color: #4a5568;
+        .card-response p {
             line-height: 1.6;
+            color: #333;
+            margin-bottom: 10px;
         }
 
         .controls {
             display: flex;
-            gap: 15px;
+            gap: 20px;
             justify-content: center;
             flex-wrap: wrap;
+            margin-top: 40px;
         }
 
         button {
-            padding: 15px 30px;
+            padding: 12px 24px;
             font-size: 1rem;
-            border: none;
-            border-radius: 10px;
+            border: 1px solid #333;
+            background: white;
             cursor: pointer;
-            transition: all 0.3s ease;
             font-family: 'Georgia', serif;
             font-weight: 600;
+            transition: all 0.2s ease;
         }
 
-        .btn-next {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        button:hover {
+            background: #333;
             color: white;
-        }
-
-        .btn-next:hover {
-            transform: scale(1.05);
-            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
-        }
-
-        .btn-random {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            color: white;
-        }
-
-        .btn-random:hover {
-            transform: scale(1.05);
-            box-shadow: 0 5px 20px rgba(245, 87, 108, 0.4);
-        }
-
-        .btn-reflect {
-            background: #48bb78;
-            color: white;
-        }
-
-        .btn-reflect:hover {
-            transform: scale(1.05);
-            box-shadow: 0 5px 20px rgba(72, 187, 120, 0.4);
         }
 
         .stats {
-            margin-top: 30px;
-            color: white;
+            margin-top: 40px;
+            text-align: center;
+            color: #666;
             font-size: 0.9rem;
         }
 
-        .reflection-input {
+        .reflection-area {
+            margin-top: 40px;
+            padding: 30px;
+            background: white;
+            border: 1px solid #ddd;
+        }
+
+        .reflection-area h3 {
+            font-size: 1rem;
+            color: #444;
+            margin-bottom: 15px;
+        }
+
+        textarea {
             width: 100%;
             padding: 15px;
-            border: 2px solid #e2e8f0;
-            border-radius: 10px;
+            border: 1px solid #ccc;
             font-family: 'Georgia', serif;
             font-size: 1rem;
             margin-bottom: 15px;
             resize: vertical;
-            min-height: 100px;
-            transition: border-color 0.3s ease;
+            min-height: 120px;
         }
 
-        .reflection-input:focus {
+        textarea:focus {
             outline: none;
-            border-color: #667eea;
+            border-color: #333;
         }
 
         .reflection-save {
-            background: #48bb78;
+            background: #333;
             color: white;
-            padding: 10px 20px;
             border: none;
-            border-radius: 8px;
+            padding: 10px 20px;
             cursor: pointer;
-            font-size: 0.9rem;
+            font-family: 'Georgia', serif;
         }
 
         .reflection-save:hover {
-            background: #38a169;
-        }
-
-        .reflection-section {
-            display: none;
-            margin-top: 30px;
-            padding: 20px;
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
-        }
-
-        .reflection-section.show {
-            display: block;
-            animation: fadeIn 0.5s ease;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            background: #000;
         }
 
         .reflection-counter {
             text-align: right;
             font-size: 0.8rem;
-            color: #718096;
+            color: #999;
             margin-top: 10px;
+        }
+
+        .conversation {
+            margin-top: 40px;
+            border-top: 2px solid #333;
+            padding-top: 40px;
+        }
+
+        .message {
+            margin-bottom: 20px;
+        }
+
+        .message.stoic {
+            background: #f9f9f9;
+            padding: 20px;
+            border-left: 4px solid #333;
+        }
+
+        .message.user {
+            background: white;
+            padding: 20px;
+            border-right: 4px solid #333;
+        }
+
+        .message-label {
+            font-size: 0.8rem;
+            color: #666;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .message-content {
+            line-height: 1.6;
+            color: #222;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1> Stoic What If Cards</h1>
+        <h1>Stoic What If Cards</h1>
         
         <div class="card-container">
-            <div class="card-title">Today's Challenge</div>
+            <div class="card-title">Today's Scenario</div>
             <div class="card-question" id="question">Loading...</div>
             <div class="card-source" id="source"></div>
             
-            <div class="card-reflection" id="reflection-section" style="display: none;">
-                <h4>My Reflection</h4>
-                <textarea 
-                    class="reflection-input" 
-                    id="reflection-text" 
-                    placeholder="Take a moment to reflect on this scenario. How would a Stoic respond? What would you do differently?"></textarea>
-                <button class="reflection-save" id="save-reflection">Save Reflection</button>
-                <div class="reflection-counter" id="reflection-counter">0 reflections saved</div>
+            <div class="card-response" id="response-section" style="display: none;">
+                <h3>Reflection</h3>
+                <div id="response-text"></div>
             </div>
             
             <div class="controls">
-                <button class="btn-next" id="next-btn">Next Card</button>
-                <button class="btn-random" id="random-btn">Random Card</button>
-                <button class="btn-reflect" id="reflect-btn">Reflect</button>
+                <button id="next-btn">Next Card</button>
+                <button id="random-btn">Random</button>
+                <button id="reflect-btn">Reflect</button>
             </div>
         </div>
-        
+
+        <div class="conversation" id="conversation-section" style="display: none;">
+            <h3>Conversation</h3>
+            <div id="messages"></div>
+        </div>
+
+        <div class="reflection-area">
+            <h3>Your Reflection</h3>
+            <textarea id="reflection-text" placeholder="Write your thoughts here..."></textarea>
+            <button class="reflection-save" id="save-reflection">Save Reflection</button>
+            <div class="reflection-counter" id="reflection-counter">0 reflections saved</div>
+        </div>
+
         <div class="stats">
-            Card <span id="current-card">1</span> of <span id="total-cards">52</span>
+            Card <span id="current-card">1</span> of <span id="total-cards">50</span>
         </div>
     </div>
 
     <script>
+        // Cards array - 50 Stoic scenarios
         const cards = [
-            {
-                question: "What if today everything that could go wrong, does go wrong?",
-                source: "Marcus Aurelius, Meditations 2.1",
-                reflection: "This is the Stoic exercise of 'premeditatio malorum' - premeditating adversity. Think about how you would respond if today brought every inconvenience, insult, and difficulty. Would you be overwhelmed, or would you meet each challenge with calm and virtue?"
-            },
-            {
-                question: "What if the person who insulted you today didn't mean to?",
-                source: "Marcus Aurelius, Meditations 7.26",
-                reflection: "Consider that people often act from ignorance, not malice. If their actions were unintentional, how would that change your response? Would you still feel hurt, or would understanding replace anger?"
-            },
-            {
-                question: "What if you lost everything you own tomorrow?",
-                source: "Seneca, Letters to Lucilius 98.20",
-                reflection: "This isn't meant to scare you, but to remind you that true wealth is in your character, not your possessions. What would remain valuable if you lost all your things? Your virtues? Your relationships? Your wisdom?"
-            },
-            {
-                question: "What if someone you helped turned against you?",
-                source: "Marcus Aurelius, Meditations 6.6",
-                reflection: "You do good not for rewards, but because it's right. If your kindness is met with betrayal, does that make your kindness any less valuable? How would you respond - with bitterness or continued virtue?"
-            },
-            {
-                question: "What if you only had one day left to live?",
-                source: "Marcus Aurelius, Meditations 9.3",
-                reflection: "How would you spend your final day? Would you waste it on trivial worries, or would you focus on what truly matters? What would you say to the people you love? What would you leave them with?"
-            },
-            {
-                question: "What if the weather ruins all your plans today?",
-                source: "Marcus Aurelius, Meditations 5.23",
-                reflection: "The weather is outside your control. Your response is within your control. Would you let this frustrate you, or would you adapt and find joy in whatever situation you're in? How would a Stoic respond to unexpected circumstances?"
-            },
-            {
-                question: "What if you were completely unrecognized for your good work?",
-                source: "Marcus Aurelius, Meditations 9.11",
-                reflection: "Do you act virtuously for the approval of others, or because it's right? If no one ever knew about your kindness, integrity, or hard work, would you still do it? What is your true motivation?"
-            },
-            {
-                question: "What if someone has a better idea than you?",
-                source: "Marcus Aurelius, Meditations 6.54",
-                reflection: "Would you feel threatened, or would you be grateful for the opportunity to learn? How would you respond - with defensiveness or openness? Can you appreciate excellence in others without jealousy?"
-            },
-            {
-                question: "What if you had to live with the consequences of your worst decision forever?",
-                source: "Epictetus, Enchiridion 5",
-                reflection: "This isn't about fear, but about responsibility. How would this knowledge change the way you make decisions today? What would you do differently, knowing your choices have lasting consequences?"
-            },
-            {
-                question: "What if the person you're angry with right now died today?",
-                source: "Marcus Aurelius, Meditations 11.18",
-                reflection: "Would your anger still matter? Would you regret not resolving the conflict? How would this remind you of the brevity of life and the futility of holding grudges?"
-            },
-            {
-                question: "What if you woke up with no complaints available?",
-                source: "Marcus Aurelius, Meditations 4.3",
-                reflection: "We often complain about things we can control or accept. If you couldn't complain, would you still find things to be dissatisfied about? Or would you focus on gratitude for what you have?"
-            },
-            {
-                question: "What if you had to teach someone everything you know about living well?",
-                source: "Marcus Aurelius, Meditations 12.1",
-                reflection: "How would you distill your life lessons into practical wisdom? What are the most important principles you'd want to pass on? What would your core philosophy be?"
-            },
-            {
-                question: "What if someone you love suffered greatly today?",
-                source: "Marcus Aurelius, Meditations 11.18",
-                reflection: "Would you try to fix their pain, or would you simply be there with them in compassion? How can you help without trying to control what you cannot control? What's the most virtuous response?"
-            },
-            {
-                question: "What if you had to do today's tasks over and over for the rest of your life?",
-                source: "Marcus Aurelius, Meditations 8.7",
-                reflection: "This is the ultimate test of whether you find meaning in your work. Would you embrace the repetition with purpose, or would you grow weary? How would you make the ordinary extraordinary?"
-            },
-            {
-                question: "What if you were completely alone and had only your thoughts?",
-                source: "Marcus Aurelius, Meditations 9.1",
-                reflection: "If you couldn't distract yourself with people, entertainment, or busyness, would you be comfortable with your own mind? What would your thoughts reveal about your character?"
-            },
-            {
-                question: "What if everyone judged you as fairly as you judge yourself?",
-                source: "Marcus Aurelius, Meditations 4.3",
-                reflection: "We're often our own harshest critic. If others were as demanding as we are of ourselves, would they find much to criticize? How would this change your self-perception?"
-            },
-            {
-                question: "What if you had to apologize for every thought you've had today?",
-                source: "Marcus Aurelius, Meditations 11.11",
-                reflection: "How many of your thoughts were worthy of expression? How many were wasteful, negative, or self-serving? What would you change about your mental habits?"
-            },
-            {
-                question: "What if you couldn't check your phone or computer for a full day?",
-                source: "Marcus Aurelius, Meditations 7.69",
-                reflection: "Would you feel disconnected or would you feel freed? What would you notice about your surroundings if you weren't constantly distracted? How would you spend your time?"
-            },
-            {
-                question: "What if you had to make a difficult decision right now with complete certainty?",
-                source: "Epictetus, Discourses 3.24",
-                reflection: "If you knew for certain what the right choice was, would you have the courage to make it? What's stopping you from making that choice anyway, even without certainty?"
-            },
-            {
-                question: "What if you met someone who lived exactly as you wish you could live?",
-                source: "Marcus Aurelius, Meditations 6.48",
-                reflection: "Would you feel inspired or envious? How would you learn from them without comparing yourself negatively? What specific qualities would you want to cultivate in yourself?"
-            },
-            {
-                question: "What if you had to defend your life choices to your future self?",
-                source: "Marcus Aurelius, Meditations 12.29",
-                reflection: "How would your future self judge the choices you're making today? Would they be proud, or would they wish you'd made different decisions? What would you want to hear?"
-            },
-            {
-                question: "What if you couldn't speak for a full day?",
-                source: "Marcus Aurelius, Meditations 4.17",
-                reflection: "How would this change your communication? Would you speak more thoughtfully, or would you feel constrained? What would you notice about the conversations you usually have?"
-            },
-            {
-                question: "What if you had to forgive someone who hasn't apologized?",
-                source: "Marcus Aurelius, Meditations 6.27",
-                reflection: "Would you be able to let go of the resentment for your own peace of mind? How would forgiveness change your relationship with that person - and with yourself?"
-            },
-            {
-                question: "What if you had to describe your character in one sentence?",
-                source: "Marcus Aurelius, Meditations 4.37",
-                reflection: "What would your honest assessment be? Would you be pleased with how you describe yourself? What one quality would you want to change, and what one would you want to cultivate?"
-            },
-            {
-                question: "What if you had to live in the same moment over and over until you got it right?",
-                source: "Marcus Aurelius, Meditations 8.47",
-                reflection: "Which moment would you want to perfect? How many times would it take before you responded with complete virtue? What does this tell you about your current habits?"
-            },
-            {
-                question: "What if you had to choose between being right and being kind today?",
-                source: "Marcus Aurelius, Meditations 11.18",
-                reflection: "Which would your better self choose? How can you be both truthful and compassionate? Is there a way to be neither harsh nor dishonest?"
-            },
-            {
-                question: "What if you couldn't complain about anything for a week?",
-                source: "Marcus Aurelius, Meditations 4.3",
-                reflection: "Would you find things to complain about anyway? How would this change your perspective on daily frustrations? Would you discover more to appreciate?"
-            },
-            {
-                question: "What if you had to make amends for something you've done wrong?",
-                source: "Marcus Aurelius, Meditations 11.18",
-                reflection: "What's the one thing you've been avoiding addressing? How would you approach making things right? What would need to happen for true reconciliation?"
-            },
-            {
-                question: "What if you had to spend a day doing absolutely nothing but observing nature?",
-                source: "Marcus Aurelius, Meditations 4.21",
-                reflection: "Would you be able to sit with your thoughts? What would you learn from watching the natural world? How would this change your perspective on your problems?"
-            },
-            {
-                question: "What if you had to teach your childhood self one lesson about life?",
-                source: "Marcus Aurelius, Meditations 12.26",
-                reflection: "What would you want them to know that you had to learn the hard way? How would this change their trajectory? What wisdom would you pass on?"
-            },
-            {
-                question: "What if you had to accept that some things will never make sense?",
-                source: "Marcus Aurelius, Meditations 2.17",
-                reflection: "Would you be able to find peace without understanding everything? How would this change your relationship with uncertainty? Can you trust the bigger picture even when you can't see it?"
-            },
-            {
-                question: "What if you had to do something courageous today that you've been avoiding?",
-                source: "Marcus Aurelius, Meditations 7.26",
-                reflection: "What's the one thing that's been on your mind but you've been putting off? What's stopping you? How would facing this fear change your self-perception?"
-            },
-            {
-                question: "What if you had to describe today's challenges as opportunities?",
-                source: "Marcus Aurelius, Meditations 8.40",
-                reflection: "How would this reframing change your experience of the day? What opportunities are hiding in your current difficulties? How would you respond if you saw every obstacle as practice?"
-            },
-            {
-                question: "What if you had to live by one principle for the rest of your life?",
-                source: "Marcus Aurelius, Meditations 11.18",
-                reflection: "Which principle would you choose - justice, wisdom, courage, temperance? How would this single principle guide all your decisions? What would your life look like?"
-            },
-            {
-                question: "What if you had to say goodbye to someone you love today?",
-                source: "Marcus Aurelius, Meditations 9.3",
-                reflection: "How would this knowledge change how you spend time with them today? What would you say if you knew it might be the last time? What would you want them to remember about you?"
-            },
-            {
-                question: "What if you had to make a decision without knowing the outcome?",
-                source: "Epictetus, Enchiridion 5",
-                reflection: "How do you usually handle uncertainty? What's your fear about not knowing? How would you act if you trusted that you have the wisdom to handle whatever happens?"
-            },
-            {
-                question: "What if you had to spend a day helping someone without being noticed?",
-                source: "Marcus Aurelius, Meditations 6.54",
-                reflection: "How would this change your motivation to help? Would you still do it if no one ever knew? What does this tell you about your reasons for being kind?"
-            },
-            {
-                question: "What if you had to reflect on your day before going to sleep?",
-                source: "Marcus Aurelius, Meditations 11.18",
-                reflection: "What would you review - what you did well, what you could have done better, what you're grateful for? How would this practice change your life over time?"
-            },
-            {
-                question: "What if you had to accept that you're not in control of much?",
-                source: "Epictetus, Enchiridion 1",
-                reflection: "What would you focus on instead? What's within your control? How would this acceptance change your stress levels and your sense of agency?"
-            },
-            {
-                question: "What if you had to live in a way that your best self would approve of?",
-                source: "Marcus Aurelius, Meditations 12.1",
-                reflection: "How would this change your daily choices? What would your best self tell you to focus on today? How can you get closer to that ideal version of you?"
-            }
+            { question: "What if today everything that could go wrong, does go wrong?", source: "Meditations 2.1" },
+            { question: "What if the person who insulted you today didn't mean to?", source: "Meditations 7.26" },
+            { question: "What if you lost everything you own tomorrow?", source: "Letters 98.20" },
+            { question: "What if someone you helped turned against you?", source: "Meditations 6.6" },
+            { question: "What if you only had one day left to live?", source: "Meditations 9.3" },
+            { question: "What if the weather ruins all your plans today?", source: "Meditations 5.23" },
+            { question: "What if you were completely unrecognized for your good work?", source: "Meditations 9.11" },
+            { question: "What if someone has a better idea than you?", source: "Meditations 6.54" },
+            { question: "What if you had to live with the consequences of your worst decision forever?", source: "Enchiridion 5" },
+            { question: "What if the person you're angry with right now died today?", source: "Meditations 11.18" },
+            { question: "What if you woke up with no complaints available?", source: "Meditations 4.3" },
+            { question: "What if you had to teach someone everything you know about living well?", source: "Meditations 12.1" },
+            { question: "What if someone you love suffered greatly today?", source: "Meditations 11.18" },
+            { question: "What if you had to do today's tasks over and over for the rest of your life?", source: "Meditations 8.7" },
+            { question: "What if you were completely alone and had only your thoughts?", source: "Meditations 9.1" },
+            { question: "What if everyone judged you as fairly as you judge yourself?", source: "Meditations 4.3" },
+            { question: "What if you had to apologize for every thought you've had today?", source: "Meditations 11.11" },
+            { question: "What if you couldn't check your phone or computer for a full day?", source: "Meditations 7.69" },
+            { question: "What if you had to make a difficult decision right now with complete certainty?", source: "Discourses 3.24" },
+            { question: "What if you met someone who lived exactly as you wish you could live?", source: "Meditations 6.48" },
+            { question: "What if you had to defend your life choices to your future self?", source: "Meditations 12.29" },
+            { question: "What if you couldn't speak for a full day?", source: "Meditations 4.17" },
+            { question: "What if you had to forgive someone who hasn't apologized?", source: "Meditations 6.27" },
+            { question: "What if you had to describe your character in one sentence?", source: "Meditations 4.37" },
+            { question: "What if you had to live in the same moment over and over until you got it right?", source: "Meditations 8.47" },
+            { question: "What if you had to choose between being right and being kind today?", source: "Meditations 11.18" },
+            { question: "What if you couldn't complain about anything for a week?", source: "Meditations 4.3" },
+            { question: "What if you had to make amends for something you've done wrong?", source: "Meditations 11.18" },
+            { question: "What if you had to spend a day doing absolutely nothing but observing nature?", source: "Meditations 4.21" },
+            { question: "What if you had to teach your childhood self one lesson about life?", source: "Meditations 12.26" },
+            { question: "What if you had to accept that some things will never make sense?", source: "Meditations 2.17" },
+            { question: "What if you had to do something courageous today that you've been avoiding?", source: "Meditations 7.26" },
+            { question: "What if you had to describe today's challenges as opportunities?", source: "Meditations 8.40" },
+            { question: "What if you had to live by one principle for the rest of your life?", source: "Meditations 11.18" },
+            { question: "What if you had to say goodbye to someone you love today?", source: "Meditations 9.3" },
+            { question: "What if you had to make a decision without knowing the outcome?", source: "Enchiridion 5" },
+            { question: "What if you had to spend a day helping someone without being noticed?", source: "Meditations 6.54" },
+            { question: "What if you had to reflect on your day before going to sleep?", source: "Meditations 11.18" },
+            { question: "What if you had to accept that you're not in control of much?", source: "Enchiridion 1" },
+            { question: "What if you had to live in a way that your best self would approve of?", source: "Meditations 12.1" },
+            { question: "What if you had to help someone who was suffering but couldn't be helped?", source: "Meditations 8.56" },
+            { question: "What if you discovered your worst enemy was actually your best teacher?", source: "Meditations 6.39" },
+            { question: "What if you had to give up everything you own and start over?", source: "Meditations 12.29" },
+            { question: "What if you realized all your worries were about things that never happened?", source: "Meditations 8.36" },
+            { question: "What if you had to teach a child about death in one sentence?", source: "Meditations 9.3" },
+            { question: "What if you found out the universe is indifferent to your success?", source: "Meditations 2.17" },
+            { question: "What if you had to live without praise for the rest of your life?", source: "Meditations 4.3" },
+            { question: "What if you discovered that your anger is always self-inflicted?", source: "Meditations 11.18" },
+            { question: "What if you had to do one virtuous act every hour today?", source: "Meditations 11.18" },
+            { question: "What if you realized that your thoughts create your reality?", source: "Meditations 8.28" },
+            { question: "What if you had to forgive someone who cannot be forgiven?", source: "Meditations 7.26" },
+            { question: "What if you discovered that your追求 for happiness is the source of your suffering?", source: "Meditations 4.3" }
         ];
 
         let currentIndex = 0;
         let reflections = [];
+        let messages = [];
 
         // Load saved reflections
         const savedReflections = localStorage.getItem('stoicReflections');
@@ -461,27 +309,32 @@
             document.getElementById('current-card').textContent = index + 1;
             document.getElementById('total-cards').textContent = cards.length;
             
-            // Hide reflection section initially
-            document.getElementById('reflection-section').style.display = 'none';
+            // Reset UI
+            document.getElementById('response-section').style.display = 'none';
             document.getElementById('reflection-text').value = '';
-            
-            // Reset button states
             document.getElementById('reflect-btn').textContent = 'Reflect';
-            document.getElementById('reflect-btn').style.background = 'linear-gradient(135deg, #48bb78 0%, #38a169 100%)';
+            document.getElementById('reflect-btn').style.background = 'white';
+            document.getElementById('reflect-btn').style.color = '#333';
+            
+            // Clear conversation
+            document.getElementById('messages').innerHTML = '';
+            messages = [];
         }
 
         function showReflection() {
-            const section = document.getElementById('reflection-section');
+            const section = document.getElementById('response-section');
             const button = document.getElementById('reflect-btn');
             
             if (section.style.display === 'none') {
                 section.style.display = 'block';
                 button.textContent = 'Hide Reflection';
-                button.style.background = 'linear-gradient(135deg, #f56565 0%, #e53e3e 100%)';
+                button.style.background = '#333';
+                button.style.color = 'white';
             } else {
                 section.style.display = 'none';
                 button.textContent = 'Reflect';
-                button.style.background = 'linear-gradient(135deg, #48bb78 0%, #38a169 100%)';
+                button.style.background = 'white';
+                button.style.color = '#333';
             }
         }
 
@@ -498,7 +351,6 @@
                 reflections.push(reflection);
                 localStorage.setItem('stoicReflections', JSON.stringify(reflections));
                 document.getElementById('reflection-counter').textContent = `${reflections.length} reflections saved`;
-                alert('Reflection saved!');
             }
         }
 
