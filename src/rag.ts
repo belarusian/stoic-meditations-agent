@@ -1,4 +1,4 @@
-import { readFileSync } from 'fs';
+import { readFileSync, writeFileSync, existsSync } from 'fs';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 import { DefaultEmbeddingFunction } from 'chromadb';
@@ -9,6 +9,9 @@ const __dirname = dirname(__filename);
 
 // Path to meditations (in repo root)
 const meditationsPath = join(__dirname, '../meditations.mb.txt');
+
+// Path to save/load embeddings cache
+const EMBEDDINGS_CACHE_PATH = join(__dirname, '../src/meditations_embeddings.json');
 
 // Embedding mode configuration
 export type EmbeddingMode = 'local' | 'remote';
@@ -26,6 +29,38 @@ export function getRemoteEmbeddingUrl(): string {
 // In-memory cache for RAG results
 let vectorStoreInitialized = false;
 let passageEmbeddings: Array<{ id: string; text: string; metadata: { book: string; section: string }; embedding: number[] }> = [];
+
+/**
+ * Load embeddings from cache file if it exists
+ */
+export function loadEmbeddingsFromCache(): boolean {
+  if (!existsSync(EMBEDDINGS_CACHE_PATH)) {
+    return false;
+  }
+  
+  try {
+    const cacheData = readFileSync(EMBEDDINGS_CACHE_PATH, 'utf-8');
+    passageEmbeddings = JSON.parse(cacheData);
+    vectorStoreInitialized = true;
+    console.log(`[RAG] Loaded ${passageEmbeddings.length} embeddings from cache`);
+    return true;
+  } catch (error: any) {
+    console.warn('[RAG] Failed to load embeddings from cache:', error.message);
+    return false;
+  }
+}
+
+/**
+ * Save embeddings to cache file
+ */
+export function saveEmbeddingsToCache(): void {
+  try {
+    writeFileSync(EMBEDDINGS_CACHE_PATH, JSON.stringify(passageEmbeddings, null, 2));
+    console.log(`[RAG] Saved ${passageEmbeddings.length} embeddings to cache`);
+  } catch (error: any) {
+    console.warn('[RAG] Failed to save embeddings to cache:', error.message);
+  }
+}
 
 /**
  * Embed a single text using the configured embedding mode
@@ -161,14 +196,15 @@ function cosineSimilarity(a: number[], b: number[]): number {
 /**
  * Initialize the in-memory vector store
  * Uses configured embedding mode (local or remote)
+ * Loads from cache if available, otherwise computes embeddings
  */
 export async function initializeVectorStore() {
-  if (vectorStoreInitialized) {
-    console.log('[RAG] Vector store already initialized');
+  // Try to load from cache first
+  if (loadEmbeddingsFromCache()) {
     return passageEmbeddings;
   }
   
-  console.log('[RAG] Initializing vector store...');
+  console.log('[RAG] No cache found, computing embeddings...');
   
   // Read and parse meditations
   const meditationsText = readFileSync(meditationsPath, 'utf-8');
@@ -213,6 +249,9 @@ export async function initializeVectorStore() {
       console.warn(`[RAG] Failed to embed batch:`, error.message);
     }
   }
+  
+  // Save embeddings to cache for next time
+  saveEmbeddingsToCache();
   
   vectorStoreInitialized = true;
   console.log(`[RAG] Vector store initialized with ${passageEmbeddings.length} passages`);
