@@ -19,7 +19,7 @@ import {
   DefaultRequestHandler,
 } from "@a2a-js/sdk/server";
 import { UserBuilder } from "@a2a-js/sdk/server/express";
-import { A2AExpressApp } from "@a2a-js/sdk/server/express";
+import { A2AExpressApp, restHandler } from "@a2a-js/sdk/server/express";
 import { MessageData } from "genkit";
 import { ai, meditationsText } from "./genkit.js";
 
@@ -289,6 +289,12 @@ async function main() {
 
   const appBuilder = new A2AExpressApp(requestHandler, UserBuilder.noAuthentication);
   const a2aApp = appBuilder.setupRoutes(expressApp);
+  
+  // Add REST handler for streaming support (POST /v1/message:stream)
+  expressApp.use("/api/rest", restHandler({
+    requestHandler: requestHandler,
+    userBuilder: UserBuilder.noAuthentication
+  }));
 
   const PORT = process.env.STOIC_AGENT_PORT || 41242;
   a2aApp.listen(PORT, () => {
