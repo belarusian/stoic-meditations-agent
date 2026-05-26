@@ -28,7 +28,16 @@ import { initializeVectorStore, getMeditationContext } from "./rag.js";
 const stoicAgentPrompt = ai.prompt('stoic_agent');
 
 // Initialize vector store on startup (lazy initialization)
-initializeVectorStore().catch(err => {
+// This runs asynchronously, so agent can start before embeddings complete
+
+// Configure embedding mode: 'local' (default) or 'remote'
+// Set to 'remote' to use the embedding server at http://10.106.1.182:8083
+import { EMBEDDING_MODE } from './rag.js';
+// EMBEDDING_MODE = 'remote'; // Uncomment to use remote embedding server
+
+initializeVectorStore().then(() => {
+  console.log(`[Agent] RAG vector store initialized (mode: ${EMBEDDING_MODE})`);
+}).catch(err => {
   console.warn('[Agent] Failed to initialize RAG vector store:', err);
 });
 

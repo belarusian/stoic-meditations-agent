@@ -10,9 +10,49 @@ const __dirname = dirname(__filename);
 // Path to meditations (in repo root)
 const meditationsPath = join(__dirname, '../meditations.mb.txt');
 
+// Embedding mode configuration
+export type EmbeddingMode = 'local' | 'remote';
+export let EMBEDDING_MODE: EmbeddingMode = 'local';
+export const REMOTE_EMBEDDING_URL = 'http://10.106.1.182:8083/v1/embeddings';
+
 // In-memory cache for RAG results
 let vectorStoreInitialized = false;
 let passageEmbeddings: Array<{ id: string; text: string; metadata: { book: string; section: string }; embedding: number[] }> = [];
+
+/**
+ * Embed a single text using the configured embedding mode
+ */
+async function embedText(text: string): Promise<number[]> {
+  if (EMBEDDING_MODE === 'local') {
+    const embeddingFunction = new DefaultEmbeddingFunction();
+    const embeddings = await embeddingFunction.generate([text]);
+    return embeddings[0] || new Array(768).fill(0);
+  } else {
+    // Remote embedding via OpenAI-compatible API
+    try {
+      const response = await fetch(REMOTE_EMBEDDING_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          input: text,
+          model: 'Qwen3-Embedding-4B-Q4_K_M.gguf'
+        })
+      });
+      
+      if (!response.ok) {
+        throw new Error(`Remote embedding failed: ${response.status}`);
+      }
+      
+      const data = await response.json();
+      return data.data[0]?.embedding || new Array(2560).fill(0); // 2560 is the model's embedding dimension
+    } catch (error: any) {
+      console.warn('[RAG] Remote embedding failed, falling back to local:', error.message);
+      const embeddingFunction = new DefaultEmbeddingFunction();
+      const embeddings = await embeddingFunction.generate([text]);
+      return embeddings[0] || new Array(768).fill(0);
+    }
+  }
+}
 
 /**
  * Parse meditations into passages (sections)
@@ -108,7 +148,8 @@ function cosineSimilarity(a: number[], b: number[]): number {
 }
 
 /**
- * Initialize the in-memory vector store using DefaultEmbeddingFunction
+ * Initialize the in-memory vector store
+ * Uses configured embedding mode (local or remote)
  */
 export async function initializeVectorStore() {
   if (vectorStoreInitialized) {
@@ -123,31 +164,35 @@ export async function initializeVectorStore() {
   const passages = parseMeditationsIntoPassages(meditationsText);
   
   if (passages.length === 0) {
-    throw new Error('Failed to parse meditations into passages');
-  }
-  
-  // Use DefaultEmbeddingFunction from chromadb (works offline)
-  const embeddingFunction = new DefaultEmbeddingFunction();
-  
-  // Embed all passages (batched)
+      throw new Error('Failed to parse meditations into passages');
+    }
+    
   const batchSize = 10;
   const totalPassages = passages.length;
   
-  console.log(`[RAG] Embedding ${totalPassages} passages using DefaultEmbeddingFunction...`);
+  if (EMBEDDING_MODE === 'remote') {
+    console.log(`[RAG] Embedding ${totalPassages} passages using remote embedding server...`);
+  } else {
+    console.log(`[RAG] Embedding ${totalPassages} passages using DefaultEmbeddingFunction...`);
+  }
   
   for (let i = 0; i < totalPassages; i += batchSize) {
     const batch = passages.slice(i, i + batchSize);
-    const batchTexts = batch.map(p => p.text);
     
     try {
-      const embeddings = await embeddingFunction.generate(batchTexts);
+      // Embed each passage in the batch
+      const batchEmbeddings: number[][] = [];
+      for (const passage of batch) {
+        const embedding = await embedText(passage.text);
+        batchEmbeddings.push(embedding);
+      }
       
       for (let j = 0; j < batch.length; j++) {
         passageEmbeddings.push({
           id: batch[j].id,
           text: batch[j].text,
           metadata: batch[j].metadata,
-          embedding: embeddings[j]
+          embedding: batchEmbeddings[j]
         });
       }
       
