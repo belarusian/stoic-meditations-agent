@@ -248,34 +248,35 @@
 
                         // If this is the working status, update the loading message
                         if (event.status.state === 'working' && event.status.message) {
-                            loadingDiv.innerHTML = `<div class="content">Consulting the Meditations...<br><small style="opacity:0.7">${event.status.message.parts[0]?.text || ''}</small></div>`;
+                            const workingText = event.status.message.parts[0]?.text || '';
+                            loadingDiv.innerHTML = `<div class="content">Consulting the Meditations...<br><small style="opacity:0.7">${workingText}</small></div>`;
                         }
 
                         // If this is a final status with a message, append it
-                        if (event.final && event.status.message) {
-                            const agentText = event.status.message.parts
-                                .map((p: any) => p.text || '')
-                                .join('\n');
-                            if (agentText) {
-                                fullResponse += (fullResponse ? '\n\n' : '') + agentText;
+                           if (event.final && event.status.message) {
+                                const agentText = event.status.message.parts
+                                    .map((p) => p.text || '')
+                                    .join('\n');
+                                if (agentText) {
+                                    fullResponse = fullResponse ? fullResponse + '\n\n' + agentText : agentText;
+                                }
                             }
-                        }
                     } else if (event.kind === 'message') {
                         // Direct message event
-                        const messageText = event.parts
-                            .map((p: any) => p.text || '')
-                            .join('\n');
-                        if (messageText) {
-                            fullResponse += (fullResponse ? '\n\n' : '') + messageText;
-                        }
+                           const messageText = event.parts
+                                .map((p) => p.text || '')
+                                .join('\n');
+                            if (messageText) {
+                                fullResponse = fullResponse ? fullResponse + '\n\n' + messageText : messageText;
+                            }
                     } else if (event.kind === 'task') {
                         // Task event - extract any message
                         if (event.status?.message) {
                             const taskMessageText = event.status.message.parts
-                                .map((p: any) => p.text || '')
+                                .map((p) => p.text || '')
                                 .join('\n');
                             if (taskMessageText) {
-                                fullResponse += (fullResponse ? '\n\n' : '') + taskMessageText;
+                                fullResponse = fullResponse ? fullResponse + '\n\n' + taskMessageText : taskMessageText;
                             }
                         }
                     }
@@ -329,21 +330,21 @@
 
                     if (event.kind === 'status-update' && event.final && event.status.message) {
                         const agentText = event.status.message.parts
-                            .map((p: any) => p.text || '')
+                            .map((p) => p.text || '')
                             .join('\n');
                         if (agentText) {
                             fullResponse += agentText;
                         }
                     } else if (event.kind === 'message') {
                         const msgText = event.parts
-                            .map((p: any) => p.text || '')
+                            .map((p) => p.text || '')
                             .join('\n');
                         if (msgText) {
                             fullResponse += msgText;
                         }
                     } else if (event.kind === 'task' && event.status?.message) {
                         const taskMsg = event.status.message.parts
-                            .map((p: any) => p.text || '')
+                            .map((p) => p.text || '')
                             .join('\n');
                         if (taskMsg) {
                             fullResponse += taskMsg;
