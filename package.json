@@ -24,11 +24,12 @@
   "dependencies": {
     "@a2a-js/sdk": "^0.3.13",
     "@genkit-ai/compat-oai": "^1.35.0",
+    "chromadb": "^1.8.1",
+    "chromadb-default-embed": "^2.14.0",
     "cors": "^2.8.6",
     "express": "^5.2.1",
     "genkit": "^1.35.0",
-    "uuid": "^14.0.0",
-    "chromadb": "^1.8.1"
+    "uuid": "^14.0.0"
   },
   "devDependencies": {
     "@types/cors": "^2.8.19",
