@@ -223,7 +223,7 @@
                 userMessage.contextId = contextId;
             }
 
-            // Show loading
+           // Show loading
             const chat = document.getElementById('chat-messages');
             const loadingDiv = document.createElement('div');
             loadingDiv.className = 'message agent';
@@ -232,34 +232,76 @@
             chat.scrollTop = chat.scrollHeight;
 
             try {
-                const response = await client.sendMessage({ message: userMessage });
+                // Use sendMessageStream for real-time updates instead of sendMessage
+                const stream = client.sendMessageStream({ message: userMessage });
 
-                // Remove loading
-                chat.removeChild(loadingDiv);
+                // Remove loading when we get the first real response
+                let firstResponseReceived = false;
+                let fullResponse = '';
 
-                if (response.contextId) {
-                    contextId = response.contextId;
-                }
+                for await (const event of stream) {
+                    console.log('Received event:', event.kind, event);
 
-                let agentResponse = '';
-                if (response.kind === 'message') {
-                    agentResponse = response.parts[0].text;
-                } else if (response.kind === 'task') {
-                    if (response.history && response.history.length > 0) {
-                        const agentMsg = response.history.find(m => m.role === 'agent');
-                        if (agentMsg && agentMsg.parts && agentMsg.parts[0] && agentMsg.parts[0].text) {
-                            agentResponse = agentMsg.parts[0].text;
+                    if (event.kind === 'status-update') {
+                        // Update status (working, completed, input-required, etc.)
+                        console.log(`Status: ${event.status.state} (Task: ${event.taskId})`);
+
+                        // If this is the working status, update the loading message
+                        if (event.status.state === 'working' && event.status.message) {
+                            loadingDiv.innerHTML = `<div class="content">Consulting the Meditations...<br><small style="opacity:0.7">${event.status.message.parts[0]?.text || ''}</small></div>`;
+                        }
+
+                        // If this is a final status with a message, append it
+                        if (event.final && event.status.message) {
+                            const agentText = event.status.message.parts
+                                .map((p: any) => p.text || '')
+                                .join('\n');
+                            if (agentText) {
+                                fullResponse += (fullResponse ? '\n\n' : '') + agentText;
+                            }
+                        }
+                    } else if (event.kind === 'message') {
+                        // Direct message event
+                        const messageText = event.parts
+                            .map((p: any) => p.text || '')
+                            .join('\n');
+                        if (messageText) {
+                            fullResponse += (fullResponse ? '\n\n' : '') + messageText;
+                        }
+                    } else if (event.kind === 'task') {
+                        // Task event - extract any message
+                        if (event.status?.message) {
+                            const taskMessageText = event.status.message.parts
+                                .map((p: any) => p.text || '')
+                                .join('\n');
+                            if (taskMessageText) {
+                                fullResponse += (fullResponse ? '\n\n' : '') + taskMessageText;
+                            }
                         }
                     }
-                    if (!agentResponse) {
-                        agentResponse = `Task state: ${response.status.state}`;
+
+                    // Update contextId if provided
+                    if (event.contextId) {
+                        contextId = event.contextId;
+                    }
+
+                    // Show partial response as it comes in (streaming effect)
+                    if (fullResponse && !firstResponseReceived) {
+                        loadingDiv.innerHTML = `<div class="content">${fullResponse}</div>`;
+                        firstResponseReceived = true;
+                    } else if (fullResponse) {
+                        loadingDiv.innerHTML = `<div class="content">${fullResponse}</div>`;
                     }
                 }
 
-                addMessage('agent', agentResponse);
+                // Remove loading and show final response
+                chat.removeChild(loadingDiv);
+                if (fullResponse) {
+                    addMessage('agent', fullResponse);
+                }
 
             } catch (error) {
-                chat.removeChild(loadingDiv);
+                try { chat.removeChild(loadingDiv); } catch (e) {}
                 console.error('Error with agent:', error);
                 addMessage('agent', 'Error: Could not connect to Stoic Guide. Check that the agent is running.');
             }
@@ -278,25 +320,43 @@
             };
 
             try {
-                const response = await client.sendMessage({ message: userMessage });
-                if (response.contextId) {
-                    contextId = response.contextId;
-                }
-                
-                let agentResponse = '';
-                if (response.kind === 'message') {
-                    agentResponse = response.parts[0].text;
-                } else if (response.kind === 'task') {
-                    if (response.history && response.history.length > 0) {
-                        const agentMsg = response.history.find(m => m.role === 'agent');
-                        if (agentMsg && agentMsg.parts && agentMsg.parts[0] && agentMsg.parts[0].text) {
-                            agentResponse = agentMsg.parts[0].text;
+                // Use streaming for the initial dialogue as well
+                const stream = client.sendMessageStream({ message: userMessage });
+                let fullResponse = '';
+
+                for await (const event of stream) {
+                    console.log('Initial event:', event.kind);
+
+                    if (event.kind === 'status-update' && event.final && event.status.message) {
+                        const agentText = event.status.message.parts
+                            .map((p: any) => p.text || '')
+                            .join('\n');
+                        if (agentText) {
+                            fullResponse += agentText;
                         }
+                    } else if (event.kind === 'message') {
+                        const msgText = event.parts
+                            .map((p: any) => p.text || '')
+                            .join('\n');
+                        if (msgText) {
+                            fullResponse += msgText;
+                        }
+                    } else if (event.kind === 'task' && event.status?.message) {
+                        const taskMsg = event.status.message.parts
+                            .map((p: any) => p.text || '')
+                            .join('\n');
+                        if (taskMsg) {
+                            fullResponse += taskMsg;
+                        }
+                    }
+
+                    if (event.contextId) {
+                        contextId = event.contextId;
                     }
                 }
 
-                if (agentResponse) {
-                    addMessage('agent', agentResponse);
+                if (fullResponse) {
+                    addMessage('agent', fullResponse);
                 }
 
             } catch (error) {
