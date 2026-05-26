@@ -12,8 +12,16 @@ const meditationsPath = join(__dirname, '../meditations.mb.txt');
 
 // Embedding mode configuration
 export type EmbeddingMode = 'local' | 'remote';
-export let EMBEDDING_MODE: EmbeddingMode = 'local';
-export const REMOTE_EMBEDDING_URL = 'http://10.106.1.182:8083/v1/embeddings';
+
+// Get embedding mode from environment variable (runtime config)
+export function getEmbeddingMode(): EmbeddingMode {
+  return (process.env.EMBEDDING_MODE as EmbeddingMode) || 'local';
+}
+
+// Get remote embedding URL from environment variable (runtime config)
+export function getRemoteEmbeddingUrl(): string {
+  return process.env.REMOTE_EMBEDDING_URL || 'http://10.106.1.182:8083/v1/embeddings';
+}
 
 // In-memory cache for RAG results
 let vectorStoreInitialized = false;
@@ -23,14 +31,17 @@ let passageEmbeddings: Array<{ id: string; text: string; metadata: { book: strin
  * Embed a single text using the configured embedding mode
  */
 async function embedText(text: string): Promise<number[]> {
-  if (EMBEDDING_MODE === 'local') {
+  const mode = getEmbeddingMode();
+  const remoteUrl = getRemoteEmbeddingUrl();
+  
+  if (mode === 'local') {
     const embeddingFunction = new DefaultEmbeddingFunction();
     const embeddings = await embeddingFunction.generate([text]);
     return embeddings[0] || new Array(768).fill(0);
   } else {
     // Remote embedding via OpenAI-compatible API
     try {
-      const response = await fetch(REMOTE_EMBEDDING_URL, {
+      const response = await fetch(remoteUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -164,13 +175,14 @@ export async function initializeVectorStore() {
   const passages = parseMeditationsIntoPassages(meditationsText);
   
   if (passages.length === 0) {
-      throw new Error('Failed to parse meditations into passages');
-    }
-    
+    throw new Error('Failed to parse meditations into passages');
+  }
+  
   const batchSize = 10;
   const totalPassages = passages.length;
+  const mode = getEmbeddingMode();
   
-  if (EMBEDDING_MODE === 'remote') {
+  if (mode === 'remote') {
     console.log(`[RAG] Embedding ${totalPassages} passages using remote embedding server...`);
   } else {
     console.log(`[RAG] Embedding ${totalPassages} passages using DefaultEmbeddingFunction...`);
