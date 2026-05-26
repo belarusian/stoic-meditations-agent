@@ -1,7 +1,7 @@
 import { readFileSync } from 'fs';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
-import { ChromaClient, DefaultEmbeddingFunction, IncludeEnum } from 'chromadb';
+import { DefaultEmbeddingFunction } from 'chromadb';
 
 // Get the directory of the current file
 const __filename = fileURLToPath(import.meta.url);
@@ -12,8 +12,7 @@ const meditationsPath = join(__dirname, '../meditations.mb.txt');
 
 // In-memory cache for RAG results
 let vectorStoreInitialized = false;
-let chromaClient: ChromaClient | null = null;
-let collection: any = null;
+let passageEmbeddings: Array<{ id: string; text: string; metadata: { book: string; section: string }; embedding: number[] }> = [];
 
 /**
  * Parse meditations into passages (sections)
@@ -84,12 +83,37 @@ export function parseMeditationsIntoPassages(text: string): Array<{ id: string; 
 }
 
 /**
- * Initialize the ChromaDB vector store
+ * Simple cosine similarity calculator
+ */
+function cosineSimilarity(a: number[], b: number[]): number {
+  if (a.length !== b.length) {
+    return 0;
+  }
+  
+  let dotProduct = 0;
+  let magnitudeA = 0;
+  let magnitudeB = 0;
+  
+  for (let i = 0; i < a.length; i++) {
+    dotProduct += a[i] * b[i];
+    magnitudeA += a[i] * a[i];
+    magnitudeB += b[i] * b[i];
+  }
+  
+  if (magnitudeA === 0 || magnitudeB === 0) {
+    return 0;
+  }
+  
+  return dotProduct / (Math.sqrt(magnitudeA) * Math.sqrt(magnitudeB));
+}
+
+/**
+ * Initialize the in-memory vector store using DefaultEmbeddingFunction
  */
 export async function initializeVectorStore() {
   if (vectorStoreInitialized) {
     console.log('[RAG] Vector store already initialized');
-    return collection;
+    return passageEmbeddings;
   }
   
   console.log('[RAG] Initializing vector store...');
@@ -102,56 +126,41 @@ export async function initializeVectorStore() {
     throw new Error('Failed to parse meditations into passages');
   }
   
-  // Initialize ChromaDB client (in-memory by default)
-  chromaClient = new ChromaClient();
-  
-  // Get or create collection
-  collection = await chromaClient.getOrCreateCollection({
-    name: 'meditations',
-    metadata: { 'hnsw:space': 'cosine' }
-  });
-  
-  // Check if collection is already populated
-  const count = await collection.count();
-  if (count > 0) {
-    console.log(`[RAG] Vector store already contains ${count} passages`);
-    vectorStoreInitialized = true;
-    return collection;
-  }
-  
-  // Use the model's embedding capability
-  console.log('[RAG] Embedding passages...');
-  
-  // Get embedding dimension by embedding a test text
-  console.log('[RAG] Determining embedding dimension...');
-  try {
-    // Using DefaultEmbeddingFunction, we don't need to call ai.embed
-    console.log('[RAG] Using DefaultEmbeddingFunction for embeddings');
-  } catch (error: any) {
-    console.warn('[RAG] Embed error:', error);
-    // Default to 768 dimensions
-  }
-  
-  // Use DefaultEmbeddingFunction as fallback
+  // Use DefaultEmbeddingFunction from chromadb (works offline)
   const embeddingFunction = new DefaultEmbeddingFunction();
   
-  // Embed all passages
-  const passagesText = passages.map(p => p.text);
-  const embeddings = await embeddingFunction.generate(passagesText);
+  // Embed all passages (batched)
+  const batchSize = 10;
+  const totalPassages = passages.length;
   
-  // Add to vector store
-  console.log('[RAG] Adding passages to vector store...');
-  await collection.add({
-    ids: passages.map(p => p.id),
-    embeddings: embeddings,
-    metadatas: passages.map(p => p.metadata),
-    documents: passagesText
-  });
+  console.log(`[RAG] Embedding ${totalPassages} passages using DefaultEmbeddingFunction...`);
+  
+  for (let i = 0; i < totalPassages; i += batchSize) {
+    const batch = passages.slice(i, i + batchSize);
+    const batchTexts = batch.map(p => p.text);
+    
+    try {
+      const embeddings = await embeddingFunction.generate(batchTexts);
+      
+      for (let j = 0; j < batch.length; j++) {
+        passageEmbeddings.push({
+          id: batch[j].id,
+          text: batch[j].text,
+          metadata: batch[j].metadata,
+          embedding: embeddings[j]
+        });
+      }
+      
+      console.log(`[RAG] Embedded ${Math.min(i + batchSize, totalPassages)}/${totalPassages} passages`);
+    } catch (error: any) {
+      console.warn(`[RAG] Failed to embed batch:`, error.message);
+    }
+  }
   
   vectorStoreInitialized = true;
-  console.log(`[RAG] Vector store initialized with ${passages.length} passages`);
+  console.log(`[RAG] Vector store initialized with ${passageEmbeddings.length} passages`);
   
-  return collection;
+  return passageEmbeddings;
 }
 
 /**
@@ -165,43 +174,34 @@ export async function queryVectorStore(query: string, k: number = 5): Promise<Ar
     await initializeVectorStore();
   }
   
-  if (!collection) {
-    throw new Error('Vector store not initialized');
+  if (passageEmbeddings.length === 0) {
+    return [];
   }
   
-  // Get the embedding function and embed the query
+  // Use the same embedding function
   const embeddingFunction = new DefaultEmbeddingFunction();
-  const queryEmbeddings = await embeddingFunction.generate([query]);
-  const queryVector = queryEmbeddings[0];
   
-  // Query the collection
-  const results: any = await collection.query({
-    queryEmbeddings: [queryVector],
-    nResults: k,
-    include: [IncludeEnum.Documents, IncludeEnum.Metadatas, IncludeEnum.Distances]
-  });
+  // Embed the query
+  const queryEmbeddings = await embeddingFunction.generate([query]);
+  const queryEmbedding = queryEmbeddings[0];
+  
+  // Calculate similarity with all passages
+  const scores = passageEmbeddings.map(p => ({
+    ...p,
+    score: cosineSimilarity(queryEmbedding, p.embedding)
+  }));
+  
+  // Sort by score and take top k
+  scores.sort((a, b) => b.score - a.score);
+  const topScores = scores.slice(0, k);
   
   // Format results
-  const formattedResults: Array<{ text: string; score: number; book: string; section: string }> = [];
-  
-  if (results.documents && results.documents[0]) {
-    for (let i = 0; i < results.documents[0].length; i++) {
-      const text = results.documents[0][i];
-      const metadata = results.metadatas ? results.metadatas[0][i] : {};
-      const distances = results.distances ? results.distances[0][i] : 0;
-      const distance = Array.isArray(distances) ? distances[i] : distances;
-      
-      // Convert distance to similarity score (cosine distance -> similarity)
-      const score = distance !== undefined ? 1 - distance : 0;
-      
-      formattedResults.push({
-        text,
-        score,
-        book: metadata?.book || 'Unknown',
-        section: metadata?.section || '0'
-      });
-    }
-  }
+  const formattedResults: Array<{ text: string; score: number; book: string; section: string }> = topScores.map(s => ({
+    text: s.text,
+    score: s.score,
+    book: s.metadata.book,
+    section: s.metadata.section
+  }));
   
   console.log(`[RAG] Retrieved ${formattedResults.length} relevant passages`);
   return formattedResults;
@@ -232,16 +232,9 @@ export async function getMeditationContext(userQuery: string, maxPassages: numbe
 }
 
 /**
- * Clean up vector store (for testing)
+ * Clear vector store (for testing)
  */
-export async function clearVectorStore() {
-  if (chromaClient) {
-    try {
-      await chromaClient.deleteCollection({ name: 'meditations' });
-    } catch (e) {
-      // Collection might not exist
-    }
-  }
+export function clearVectorStore() {
+  passageEmbeddings = [];
   vectorStoreInitialized = false;
-  collection = null;
 }
