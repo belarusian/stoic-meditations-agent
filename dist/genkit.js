@@ -7,7 +7,7 @@ import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 // Read meditations text (relative to project root)
-const meditationsPath = join(__dirname, "../../Sasha-Malahov/meditations.mb.txt");
+const meditationsPath = join(__dirname, "../meditations.mb.txt");
 const meditationsText = readFileSync(meditationsPath, "utf-8");
 // Define a reference to the local model
 // The model name in the modelRef should be prefixed with the plugin name, followed by a / and the model ID

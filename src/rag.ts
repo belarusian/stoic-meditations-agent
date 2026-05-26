@@ -7,8 +7,8 @@ import { ChromaClient, DefaultEmbeddingFunction, IncludeEnum } from 'chromadb';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-// Path to meditations
-const meditationsPath = join(__dirname, '../../Sasha-Malahov/meditations.mb.txt');
+// Path to meditations (in repo root)
+const meditationsPath = join(__dirname, '../meditations.mb.txt');
 
 // In-memory cache for RAG results
 let vectorStoreInitialized = false;
