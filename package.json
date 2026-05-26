@@ -1,0 +1,38 @@
+{
+  "name": "stoic-what-if-cards",
+  "version": "1.0.0",
+  "description": "A simple web-based game for practicing Stoic resilience through 'What if?' scenarios.",
+  "main": "dist/index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node dist/agent.js",
+    "build": "tsc",
+    "dev": "ts-node src/agent.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/belarusian/stoic-what-if-cards.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/belarusian/stoic-what-if-cards/issues"
+  },
+  "homepage": "https://github.com/belarusian/stoic-what-if-cards#readme",
+  "dependencies": {
+    "@a2a-js/sdk": "^0.3.13",
+    "@genkit-ai/compat-oai": "^1.35.0",
+    "cors": "^2.8.6",
+    "express": "^5.2.1",
+    "genkit": "^1.35.0",
+    "uuid": "^14.0.0"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6",
+    "@types/node": "^25.9.1",
+    "typescript": "^6.0.3"
+  }
+}

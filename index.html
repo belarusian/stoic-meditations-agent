@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stoic What If Cards</title>
+    <title>Stoic Dialogue</title>
     <style>
         * {
             margin: 0;
@@ -13,365 +13,334 @@
 
         body {
             font-family: 'Georgia', serif;
-            background: #f5f5f5;
+            background: #fff;
             min-height: 100vh;
-            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
         }
 
-        .container {
-            max-width: 700px;
-            margin: 0 auto;
+        header {
+            background: #1a1a1a;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+            border-bottom: 1px solid #e0e0e0;
         }
 
         h1 {
-            font-size: 2rem;
-            text-align: center;
-            margin-bottom: 40px;
-            color: #333;
-        }
-
-        .card-container {
-            background: white;
-            padding: 40px;
-            border-radius: 0;
-            box-shadow: none;
-            border-left: 3px solid #333;
-        }
-
-        .card-title {
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            color: #666;
-            margin-bottom: 20px;
-        }
-
-        .card-question {
             font-size: 1.5rem;
-            line-height: 1.6;
-            margin-bottom: 30px;
-            color: #222;
+            font-weight: normal;
+            letter-spacing: 2px;
+            text-transform: uppercase;
         }
 
-        .card-source {
-            font-style: italic;
-            color: #888;
-            margin-bottom: 40px;
-            font-size: 0.95rem;
-        }
-
-        .card-response {
-            padding: 30px;
-            background: #f9f9f9;
-            border-top: 1px solid #ddd;
-            border-bottom: 1px solid #ddd;
-            margin: 30px 0;
-        }
-
-        .card-response h3 {
-            font-size: 1rem;
-            color: #444;
-            margin-bottom: 15px;
-        }
-
-        .card-response p {
-            line-height: 1.6;
-            color: #333;
-            margin-bottom: 10px;
-        }
-
-        .controls {
+        .chat-container {
+            flex: 1;
             display: flex;
-            gap: 20px;
-            justify-content: center;
-            flex-wrap: wrap;
-            margin-top: 40px;
+            flex-direction: column;
+            max-width: 800px;
+            margin: 0 auto;
+            width: 100%;
+            height: calc(100vh - 80px);
         }
 
-        button {
-            padding: 12px 24px;
-            font-size: 1rem;
-            border: 1px solid #333;
-            background: white;
-            cursor: pointer;
-            font-family: 'Georgia', serif;
-            font-weight: 600;
-            transition: all 0.2s ease;
+        .chat-messages {
+            flex: 1;
+            padding: 40px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
         }
 
-        button:hover {
-            background: #333;
-            color: white;
+        .message {
+            max-width: 80%;
+            animation: fadeIn 0.3s ease;
         }
 
-        .stats {
-            margin-top: 40px;
-            text-align: center;
-            color: #666;
-            font-size: 0.9rem;
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        .reflection-area {
-            margin-top: 40px;
-            padding: 30px;
-            background: white;
-            border: 1px solid #ddd;
+        .message.user {
+            align-self: flex-end;
         }
 
-        .reflection-area h3 {
-            font-size: 1rem;
+        .message.user .content {
+            background: #1a1a1a;
+            color: #fff;
+            padding: 20px 25px;
+            border-radius: 18px 18px 2px 18px;
+            line-height: 1.7;
+            font-size: 1.05rem;
+        }
+
+        .message.agent {
+            align-self: flex-start;
+        }
+
+        .message.agent .content {
+            background: #f8f8f8;
+            color: #222;
+            padding: 20px 25px;
+            border-radius: 18px 18px 18px 2px;
+            line-height: 1.7;
+            font-size: 1.05rem;
+            border-left: 3px solid #1a1a1a;
+        }
+
+        .message.agent .content blockquote {
+            margin: 15px 0;
+            padding: 10px 15px;
+            background: #f0f0f0;
+            border-left: 2px solid #999;
+            font-style: italic;
             color: #444;
+        }
+
+        .message.agent .content p {
             margin-bottom: 15px;
+        }
+
+        .message.agent .content p:last-child {
+            margin-bottom: 0;
+        }
+
+        .message-label {
+            display: none;
+        }
+
+        .chat-input-area {
+            padding: 30px;
+            border-top: 1px solid #e0e0e0;
+            background: #fff;
+        }
+
+        .input-wrapper {
+            display: flex;
+            gap: 15px;
         }
 
         textarea {
-            width: 100%;
+            flex: 1;
             padding: 15px;
             border: 1px solid #ccc;
+            border-radius: 8px;
             font-family: 'Georgia', serif;
             font-size: 1rem;
-            margin-bottom: 15px;
-            resize: vertical;
-            min-height: 120px;
+            resize: none;
+            min-height: 60px;
+            max-height: 200px;
         }
 
         textarea:focus {
             outline: none;
-            border-color: #333;
+            border-color: #1a1a1a;
         }
 
-        .reflection-save {
-            background: #333;
-            color: white;
-            border: none;
-            padding: 10px 20px;
+        button {
+            padding: 12px 30px;
+            font-size: 1rem;
+            border: 1px solid #1a1a1a;
+            background: #1a1a1a;
+            color: #fff;
             cursor: pointer;
             font-family: 'Georgia', serif;
+            font-weight: 600;
+            border-radius: 8px;
+            transition: all 0.2s ease;
         }
 
-        .reflection-save:hover {
+        button:hover {
             background: #000;
+            transform: translateY(-1px);
         }
 
-        .reflection-counter {
-            text-align: right;
-            font-size: 0.8rem;
-            color: #999;
-            margin-top: 10px;
-        }
-
-        .conversation {
-            margin-top: 40px;
-            border-top: 2px solid #333;
-            padding-top: 40px;
-        }
-
-        .message {
-            margin-bottom: 20px;
-        }
-
-        .message.stoic {
-            background: #f9f9f9;
-            padding: 20px;
-            border-left: 4px solid #333;
-        }
-
-        .message.user {
-            background: white;
-            padding: 20px;
-            border-right: 4px solid #333;
-        }
-
-        .message-label {
-            font-size: 0.8rem;
-            color: #666;
-            margin-bottom: 10px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .message-content {
-            line-height: 1.6;
-            color: #222;
+        button:active {
+            transform: translateY(0);
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Stoic What If Cards</h1>
-        
-        <div class="card-container">
-            <div class="card-title">Today's Scenario</div>
-            <div class="card-question" id="question">Loading...</div>
-            <div class="card-source" id="source"></div>
-            
-            <div class="card-response" id="response-section" style="display: none;">
-                <h3>Reflection</h3>
-                <div id="response-text"></div>
+    <header>
+        <h1>Stoic Dialogue</h1>
+    </header>
+
+    <div class="chat-container">
+        <div class="chat-messages" id="chat-messages">
+            <!-- Messages will be added here -->
+        </div>
+        <div class="chat-input-area">
+            <div class="input-wrapper">
+                <textarea id="user-input" placeholder="Type your response..." autocomplete="off"></textarea>
+                <button id="send-btn">Send</button>
             </div>
-            
-            <div class="controls">
-                <button id="next-btn">Next Card</button>
-                <button id="random-btn">Random</button>
-                <button id="reflect-btn">Reflect</button>
-            </div>
-        </div>
-
-        <div class="conversation" id="conversation-section" style="display: none;">
-            <h3>Conversation</h3>
-            <div id="messages"></div>
-        </div>
-
-        <div class="reflection-area">
-            <h3>Your Reflection</h3>
-            <textarea id="reflection-text" placeholder="Write your thoughts here..."></textarea>
-            <button class="reflection-save" id="save-reflection">Save Reflection</button>
-            <div class="reflection-counter" id="reflection-counter">0 reflections saved</div>
-        </div>
-
-        <div class="stats">
-            Card <span id="current-card">1</span> of <span id="total-cards">50</span>
         </div>
     </div>
 
-    <script>
-        // Cards array - 50 Stoic scenarios
-        const cards = [
-            { question: "What if today everything that could go wrong, does go wrong?", source: "Meditations 2.1" },
-            { question: "What if the person who insulted you today didn't mean to?", source: "Meditations 7.26" },
-            { question: "What if you lost everything you own tomorrow?", source: "Letters 98.20" },
-            { question: "What if someone you helped turned against you?", source: "Meditations 6.6" },
-            { question: "What if you only had one day left to live?", source: "Meditations 9.3" },
-            { question: "What if the weather ruins all your plans today?", source: "Meditations 5.23" },
-            { question: "What if you were completely unrecognized for your good work?", source: "Meditations 9.11" },
-            { question: "What if someone has a better idea than you?", source: "Meditations 6.54" },
-            { question: "What if you had to live with the consequences of your worst decision forever?", source: "Enchiridion 5" },
-            { question: "What if the person you're angry with right now died today?", source: "Meditations 11.18" },
-            { question: "What if you woke up with no complaints available?", source: "Meditations 4.3" },
-            { question: "What if you had to teach someone everything you know about living well?", source: "Meditations 12.1" },
-            { question: "What if someone you love suffered greatly today?", source: "Meditations 11.18" },
-            { question: "What if you had to do today's tasks over and over for the rest of your life?", source: "Meditations 8.7" },
-            { question: "What if you were completely alone and had only your thoughts?", source: "Meditations 9.1" },
-            { question: "What if everyone judged you as fairly as you judge yourself?", source: "Meditations 4.3" },
-            { question: "What if you had to apologize for every thought you've had today?", source: "Meditations 11.11" },
-            { question: "What if you couldn't check your phone or computer for a full day?", source: "Meditations 7.69" },
-            { question: "What if you had to make a difficult decision right now with complete certainty?", source: "Discourses 3.24" },
-            { question: "What if you met someone who lived exactly as you wish you could live?", source: "Meditations 6.48" },
-            { question: "What if you had to defend your life choices to your future self?", source: "Meditations 12.29" },
-            { question: "What if you couldn't speak for a full day?", source: "Meditations 4.17" },
-            { question: "What if you had to forgive someone who hasn't apologized?", source: "Meditations 6.27" },
-            { question: "What if you had to describe your character in one sentence?", source: "Meditations 4.37" },
-            { question: "What if you had to live in the same moment over and over until you got it right?", source: "Meditations 8.47" },
-            { question: "What if you had to choose between being right and being kind today?", source: "Meditations 11.18" },
-            { question: "What if you couldn't complain about anything for a week?", source: "Meditations 4.3" },
-            { question: "What if you had to make amends for something you've done wrong?", source: "Meditations 11.18" },
-            { question: "What if you had to spend a day doing absolutely nothing but observing nature?", source: "Meditations 4.21" },
-            { question: "What if you had to teach your childhood self one lesson about life?", source: "Meditations 12.26" },
-            { question: "What if you had to accept that some things will never make sense?", source: "Meditations 2.17" },
-            { question: "What if you had to do something courageous today that you've been avoiding?", source: "Meditations 7.26" },
-            { question: "What if you had to describe today's challenges as opportunities?", source: "Meditations 8.40" },
-            { question: "What if you had to live by one principle for the rest of your life?", source: "Meditations 11.18" },
-            { question: "What if you had to say goodbye to someone you love today?", source: "Meditations 9.3" },
-            { question: "What if you had to make a decision without knowing the outcome?", source: "Enchiridion 5" },
-            { question: "What if you had to spend a day helping someone without being noticed?", source: "Meditations 6.54" },
-            { question: "What if you had to reflect on your day before going to sleep?", source: "Meditations 11.18" },
-            { question: "What if you had to accept that you're not in control of much?", source: "Enchiridion 1" },
-            { question: "What if you had to live in a way that your best self would approve of?", source: "Meditations 12.1" },
-            { question: "What if you had to help someone who was suffering but couldn't be helped?", source: "Meditations 8.56" },
-            { question: "What if you discovered your worst enemy was actually your best teacher?", source: "Meditations 6.39" },
-            { question: "What if you had to give up everything you own and start over?", source: "Meditations 12.29" },
-            { question: "What if you realized all your worries were about things that never happened?", source: "Meditations 8.36" },
-            { question: "What if you had to teach a child about death in one sentence?", source: "Meditations 9.3" },
-            { question: "What if you found out the universe is indifferent to your success?", source: "Meditations 2.17" },
-            { question: "What if you had to live without praise for the rest of your life?", source: "Meditations 4.3" },
-            { question: "What if you discovered that your anger is always self-inflicted?", source: "Meditations 11.18" },
-            { question: "What if you had to do one virtuous act every hour today?", source: "Meditations 11.18" },
-            { question: "What if you realized that your thoughts create your reality?", source: "Meditations 8.28" },
-            { question: "What if you had to forgive someone who cannot be forgiven?", source: "Meditations 7.26" },
-            { question: "What if you discovered that your追求 for happiness is the source of your suffering?", source: "Meditations 4.3" }
-        ];
+    <script type="module">
+        import { ClientFactory } from 'https://esm.sh/@a2a-js/sdk/client';
 
-        let currentIndex = 0;
-        let reflections = [];
-        let messages = [];
+        let client = null;
+        let contextId = null;
 
-        // Load saved reflections
-        const savedReflections = localStorage.getItem('stoicReflections');
-        if (savedReflections) {
-            reflections = JSON.parse(savedReflections);
-            document.getElementById('reflection-counter').textContent = `${reflections.length} reflections saved`;
-        }
-
-        function loadCard(index) {
-            const card = cards[index];
-            document.getElementById('question').textContent = card.question;
-            document.getElementById('source').textContent = `— ${card.source}`;
-            document.getElementById('current-card').textContent = index + 1;
-            document.getElementById('total-cards').textContent = cards.length;
-            
-            // Reset UI
-            document.getElementById('response-section').style.display = 'none';
-            document.getElementById('reflection-text').value = '';
-            document.getElementById('reflect-btn').textContent = 'Reflect';
-            document.getElementById('reflect-btn').style.background = 'white';
-            document.getElementById('reflect-btn').style.color = '#333';
-            
-            // Clear conversation
-            document.getElementById('messages').innerHTML = '';
-            messages = [];
-        }
-
-        function showReflection() {
-            const section = document.getElementById('response-section');
-            const button = document.getElementById('reflect-btn');
-            
-            if (section.style.display === 'none') {
-                section.style.display = 'block';
-                button.textContent = 'Hide Reflection';
-                button.style.background = '#333';
-                button.style.color = 'white';
-            } else {
-                section.style.display = 'none';
-                button.textContent = 'Reflect';
-                button.style.background = 'white';
-                button.style.color = '#333';
+        async function connectToAgent() {
+            try {
+                const factory = new ClientFactory();
+                client = await factory.createFromUrl('http://localhost:41242');
+                console.log('Connected to Stoic Guide agent');
+                return true;
+            } catch (error) {
+                console.error('Failed to connect to agent:', error);
+                return false;
             }
         }
 
-        function saveReflection() {
-            const reflectionText = document.getElementById('reflection-text').value;
-            if (reflectionText.trim()) {
-                const reflection = {
-                    date: new Date().toISOString(),
-                    cardIndex: currentIndex,
-                    question: cards[currentIndex].question,
-                    text: reflectionText
-                };
+        function addMessage(role, text) {
+            const chat = document.getElementById('chat-messages');
+            const msgDiv = document.createElement('div');
+            msgDiv.className = `message ${role}`;
+            msgDiv.innerHTML = `<div class="content">${text}</div>`;
+            chat.appendChild(msgDiv);
+            chat.scrollTop = chat.scrollHeight;
+        }
+
+        async function sendMessageToAgent(text) {
+            if (!client || !text.trim()) return;
+
+            // Add user message to chat
+            addMessage('user', text);
+
+            const userMessage = {
+                messageId: crypto.randomUUID(),
+                role: 'user',
+                parts: [{ kind: 'text', text: text }],
+                kind: 'message',
+            };
+
+            if (contextId) {
+                userMessage.contextId = contextId;
+            }
+
+            // Show loading
+            const chat = document.getElementById('chat-messages');
+            const loadingDiv = document.createElement('div');
+            loadingDiv.className = 'message agent';
+            loadingDiv.innerHTML = `<div class="content">Consulting the Meditations...</div>`;
+            chat.appendChild(loadingDiv);
+            chat.scrollTop = chat.scrollHeight;
+
+            try {
+                const response = await client.sendMessage({ message: userMessage });
+
+                // Remove loading
+                chat.removeChild(loadingDiv);
+
+                if (response.contextId) {
+                    contextId = response.contextId;
+                }
+
+                let agentResponse = '';
+                if (response.kind === 'message') {
+                    agentResponse = response.parts[0].text;
+                } else if (response.kind === 'task') {
+                    if (response.history && response.history.length > 0) {
+                        const agentMsg = response.history.find(m => m.role === 'agent');
+                        if (agentMsg && agentMsg.parts && agentMsg.parts[0] && agentMsg.parts[0].text) {
+                            agentResponse = agentMsg.parts[0].text;
+                        }
+                    }
+                    if (!agentResponse) {
+                        agentResponse = `Task state: ${response.status.state}`;
+                    }
+                }
+
+                addMessage('agent', agentResponse);
+
+            } catch (error) {
+                chat.removeChild(loadingDiv);
+                console.error('Error with agent:', error);
+                addMessage('agent', 'Error: Could not connect to Stoic Guide. Check that the agent is running.');
+            }
+        }
+
+        async function startNewDialogue() {
+            const initialPrompt = "I seek guidance from the Stoic wisdom of Marcus Aurelius. What should I reflect on today?";
+            
+            addMessage('agent', initialPrompt);
+
+            const userMessage = {
+                messageId: crypto.randomUUID(),
+                role: 'user',
+                parts: [{ kind: 'text', text: initialPrompt }],
+                kind: 'message',
+            };
+
+            try {
+                const response = await client.sendMessage({ message: userMessage });
+                if (response.contextId) {
+                    contextId = response.contextId;
+                }
                 
-                reflections.push(reflection);
-                localStorage.setItem('stoicReflections', JSON.stringify(reflections));
-                document.getElementById('reflection-counter').textContent = `${reflections.length} reflections saved`;
+                let agentResponse = '';
+                if (response.kind === 'message') {
+                    agentResponse = response.parts[0].text;
+                } else if (response.kind === 'task') {
+                    if (response.history && response.history.length > 0) {
+                        const agentMsg = response.history.find(m => m.role === 'agent');
+                        if (agentMsg && agentMsg.parts && agentMsg.parts[0] && agentMsg.parts[0].text) {
+                            agentResponse = agentMsg.parts[0].text;
+                        }
+                    }
+                }
+
+                if (agentResponse) {
+                    addMessage('agent', agentResponse);
+                }
+
+            } catch (error) {
+                console.error('Error starting dialogue:', error);
             }
         }
-
-        function nextCard() {
-            currentIndex = (currentIndex + 1) % cards.length;
-            loadCard(currentIndex);
-        }
-
-        function randomCard() {
-            currentIndex = Math.floor(Math.random() * cards.length);
-            loadCard(currentIndex);
-        }
-
-        // Event listeners
-        document.getElementById('next-btn').addEventListener('click', nextCard);
-        document.getElementById('random-btn').addEventListener('click', randomCard);
-        document.getElementById('reflect-btn').addEventListener('click', showReflection);
-        document.getElementById('save-reflection').addEventListener('click', saveReflection);
 
         // Initialize
-        loadCard(currentIndex);
+        (async function() {
+            const connected = await connectToAgent();
+            if (connected) {
+                startNewDialogue();
+            } else {
+                addMessage('agent', 'Connecting to Stoic Guide... please wait.');
+            }
+        })();
+
+        // Event listeners
+        document.getElementById('send-btn').addEventListener('click', () => {
+            const input = document.getElementById('user-input');
+            const text = input.value;
+            if (text.trim()) {
+                sendMessageToAgent(text);
+                input.value = '';
+                input.style.height = '60px';
+            }
+        });
+
+        document.getElementById('user-input').addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                const input = document.getElementById('user-input');
+                if (input.value.trim()) {
+                    sendMessageToAgent(input.value);
+                    input.value = '';
+                    input.style.height = '60px';
+                }
+            }
+        });
+
+        document.getElementById('user-input').addEventListener('input', function() {
+            this.style.height = '60px';
+            this.style.height = Math.min(this.scrollHeight, 200) + 'px';
+        });
     </script>
 </body>
 </html>
