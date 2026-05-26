@@ -27,7 +27,8 @@
     "cors": "^2.8.6",
     "express": "^5.2.1",
     "genkit": "^1.35.0",
-    "uuid": "^14.0.0"
+    "uuid": "^14.0.0",
+    "chromadb": "^1.8.1"
   },
   "devDependencies": {
     "@types/cors": "^2.8.19",

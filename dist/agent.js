@@ -4,9 +4,14 @@ import cors from "cors";
 import { InMemoryTaskStore, DefaultRequestHandler, } from "@a2a-js/sdk/server";
 import { UserBuilder } from "@a2a-js/sdk/server/express";
 import { A2AExpressApp, restHandler } from "@a2a-js/sdk/server/express";
-import { ai, meditationsText } from "./genkit.js";
+import { ai } from "./genkit.js";
+import { initializeVectorStore, getMeditationContext } from "./rag.js";
 // Load the Genkit prompt
 const stoicAgentPrompt = ai.prompt('stoic_agent');
+// Initialize vector store on startup (lazy initialization)
+initializeVectorStore().catch(err => {
+    console.warn('[Agent] Failed to initialize RAG vector store:', err);
+});
 /**
  * StoicAgentExecutor implements the agent's core logic.
  * Uses the event bus pattern to publish state updates.
@@ -97,8 +102,15 @@ class StoicAgentExecutor {
             return;
         }
         try {
+            // Get relevant meditations passages using RAG
+            const lastUserMessage = messages.length > 0 ? messages[messages.length - 1] : null;
+            const query = lastUserMessage?.content?.[0]?.text || '';
+            const meditationsContext = await getMeditationContext(query, 3);
+            console.log(`[RAG] Context length: ${meditationsContext.length} chars`);
             // Run the Genkit prompt with Meditations context
-            const response = await stoicAgentPrompt({ meditations: meditationsText }, {
+            const response = await stoicAgentPrompt({
+                meditations: meditationsContext || 'Meditations context not available.'
+            }, {
                 messages,
             });
             if (this.cancelledTasks.has(taskId)) {
