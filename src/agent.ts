@@ -23,14 +23,12 @@ import { A2AExpressApp, restHandler } from "@a2a-js/sdk/server/express";
 import { MessageData } from "genkit";
 import { ai, meditationsText } from "./genkit.js";
 
-// Simple store for contexts
-const contexts: Map<string, Message[]> = new Map();
-
 // Load the Genkit prompt
 const stoicAgentPrompt = ai.prompt('stoic_agent');
 
 /**
  * StoicAgentExecutor implements the agent's core logic.
+ * Uses the event bus pattern to publish state updates.
  */
 class StoicAgentExecutor implements AgentExecutor {
   private cancelledTasks = new Set<string>();
@@ -56,7 +54,7 @@ class StoicAgentExecutor implements AgentExecutor {
       `[StoicAgentExecutor] Processing message ${userMessage.messageId} for task ${taskId} (context: ${contextId})`
     );
 
-    // 1. Publish initial Task event if it's a new task
+    // Publish initial Task event if it's a new task
     if (!existingTask) {
       const initialTask: Task = {
         kind: 'task',
@@ -72,7 +70,7 @@ class StoicAgentExecutor implements AgentExecutor {
       eventBus.publish(initialTask);
     }
 
-    // 2. Publish "working" status update
+    // Publish "working" status update
     const workingStatusUpdate: TaskStatusUpdateEvent = {
       kind: 'status-update',
       taskId: taskId,
@@ -93,14 +91,14 @@ class StoicAgentExecutor implements AgentExecutor {
     };
     eventBus.publish(workingStatusUpdate);
 
-    // 3. Prepare messages for Genkit prompt
-    const historyForGenkit = contexts.get(contextId) || [];
-    if (!historyForGenkit.find(m => m.messageId === userMessage.messageId)) {
-      historyForGenkit.push(userMessage);
+    // Prepare messages for Genkit prompt using existing task history if available
+    let history: Message[] = [];
+    if (existingTask?.history) {
+      history = existingTask.history.filter(m => m.messageId !== userMessage.messageId);
     }
-    contexts.set(contextId, historyForGenkit);
+    history.push(userMessage);
 
-    const messages: MessageData[] = historyForGenkit
+    const messages: MessageData[] = history
       .map((m) => ({
         role: (m.role === 'agent' ? 'model' : 'user') as 'user' | 'model',
         content: m.parts
@@ -138,7 +136,7 @@ class StoicAgentExecutor implements AgentExecutor {
     }
 
     try {
-      // 4. Run the Genkit prompt with Meditations context
+      // Run the Genkit prompt with Meditations context
       const response = await stoicAgentPrompt(
         { meditations: meditationsText },
         {
@@ -175,7 +173,7 @@ class StoicAgentExecutor implements AgentExecutor {
         finalA2AState = "input-required";
       }
 
-      // 5. Publish final task status update
+      // Publish final task status update
       const agentMessage: Message = {
         kind: 'message',
         role: 'agent',
@@ -184,8 +182,6 @@ class StoicAgentExecutor implements AgentExecutor {
         taskId: taskId,
         contextId: contextId,
       };
-      historyForGenkit.push(agentMessage);
-      contexts.set(contextId, historyForGenkit);
 
       const finalUpdate: TaskStatusUpdateEvent = {
         kind: 'status-update',
@@ -238,21 +234,18 @@ const stoicAgentCard: AgentCard = {
   name: 'Stoic Guide',
   description: 'A Stoic philosophy guide that reads Marcus Aurelius\' Meditations to help you reflect on present-moment challenges.',
   url: 'http://localhost:41242/',
-  protocolVersion: 'a2a-2024-11-19',
+  protocolVersion: '1.0',
   provider: {
     organization: 'Stoic What If Cards',
     url: 'https://github.com/belarusian/stoic-what-if-cards',
   },
-  version: '0.0.1',
+  version: '1.0.0',
   capabilities: {
     streaming: true,
-    pushNotifications: false,
-    stateTransitionHistory: true,
   },
-  defaultInputModes: ['text'],
-  defaultOutputModes: ['text', 'task-status'],
+  defaultInputModes: ['text', 'text/plain', 'application/json'],
+  defaultOutputModes: ['text', 'text/plain', 'application/json'],
   additionalInterfaces: [
-    { url: 'http://localhost:41242/', transport: 'HTTP+JSON' },
     { url: 'http://localhost:41242/', transport: 'JSONRPC' },
   ],
   skills: [
@@ -266,11 +259,8 @@ const stoicAgentCard: AgentCard = {
         'How should I respond if someone insults me?',
         'What does Stoicism say about loss and grief?',
       ],
-      inputModes: ['text'],
-      outputModes: ['text', 'task-status'],
     },
   ],
-  supportsAuthenticatedExtendedCard: false,
 };
 
 async function main() {
