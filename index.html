@@ -79,6 +79,41 @@
             border-top: 2px solid #1a1a1a;
         }
 
+        .message.agent .content strong {
+            font-weight: bold;
+        }
+
+        .message.agent .content ul,
+        .message.agent .content ol {
+            margin: 16px 0;
+            padding-left: 24px;
+        }
+
+        .message.agent .content li {
+            margin-bottom: 8px;
+            line-height: 1.7;
+        }
+
+        .message.agent .content ul {
+            list-style: none;
+            padding-left: 16px;
+        }
+
+        .message.agent .content ul li::before {
+            content: "–";
+            margin-right: 8px;
+            color: #888;
+        }
+
+        .message.agent .content blockquote {
+            margin: 20px 0;
+            padding: 14px 24px;
+            background: #f5f4f1;
+            border-left: 2px solid #bbb;
+            font-style: italic;
+            color: #333;
+        }
+
         .message.agent .content p {
             margin-bottom: 16px;
         }
@@ -87,22 +122,14 @@
             margin-bottom: 0;
         }
 
-        .message.agent .content blockquote {
-            margin: 20px 0;
-            padding: 16px 24px;
-            background: #f5f4f1;
-            border-left: 2px solid #bbb;
-            font-style: italic;
-            color: #333;
-            border-radius: 0;
-        }
-
-        .message.agent .content em {
-            font-style: italic;
-        }
-
-        .message.agent .content strong {
-            font-weight: bold;
+        .message.agent .content h1,
+        .message.agent .content h2,
+        .message.agent .content h3,
+        .message.agent .content h4 {
+            margin: 24px 0 12px;
+            font-size: 1.1rem;
+            font-weight: normal;
+            letter-spacing: 0.5px;
         }
 
         /* User message — dark bubble */
@@ -230,6 +257,7 @@
 
     <script type="module">
         import { ClientFactory } from 'https://esm.sh/@a2a-js/sdk/client';
+        import { marked } from 'https://esm.sh/marked';
 
         let client = null;
         let contextId = null;
@@ -247,41 +275,19 @@
         }
 
         /**
-         * Clean up agent text: strip markdown artifacts, preserve paragraphs,
-         * and convert to safe HTML.
+         * Clean up agent text: strip control markers, then convert markdown to HTML.
          */
         function renderText(text) {
             // Trim and strip trailing AWAITING_USER_INPUT / COMPLETED markers
-            text = text.trim().replace(/^(AWAITING_USER_INPUT|COMPLETED)\s*$/gi, '');
+            text = text.trim().replace(/(?:^|\n)\s*(AWAITING_USER_INPUT|COMPLETED)\s*$/gi, '');
 
-            // Split on double-newlines to get paragraphs
-            const paragraphs = text.split(/\n\n+/);
+            // Configure marked for our use case
+            const html = marked.parse(text, {
+                breaks: true,
+                gfm: true,
+            });
 
-            return paragraphs.map(para => {
-                // Trim
-                para = para.trim();
-                if (!para) return '';
-
-                // Strip inline code backticks entirely
-                para = para.replace(/`([^`]*)`/g, '$1');
-
-                // Strip inline single-asterisk emphasis (*text*)
-                para = para.replace(/\*([^*]+)\*/g, '<em>$1</em>');
-
-                // Strip double-asterisk bold (**text**)
-                para = para.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
-
-                // Detect blockquote lines (starting with " or >)
-                const lines = para.split('\n');
-                const isBlockquote = lines.some(l => /^["»]/.test(l.trim()));
-
-                if (isBlockquote) {
-                    const content = lines.map(l => l.replace(/^["»]\s*/, '')).join(' ');
-                    return `<blockquote>${content}</blockquote>`;
-                }
-
-                return `<p>${para}</p>`;
-            }).join('');
+            return html;
         }
 
         function addMessage(role, text) {
