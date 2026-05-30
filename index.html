@@ -13,56 +13,99 @@
 
         body {
             font-family: 'Georgia', serif;
-            background: #fff;
+            background: #faf9f7;
+            color: #1a1a1a;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
         }
 
         header {
-            background: #1a1a1a;
-            color: #fff;
-            padding: 20px;
+            padding: 24px;
             text-align: center;
-            border-bottom: 1px solid #e0e0e0;
+            border-bottom: 1px solid #e0ddd8;
+            background: #fff;
         }
 
         h1 {
-            font-size: 1.5rem;
+            font-size: 1.1rem;
             font-weight: normal;
-            letter-spacing: 2px;
+            letter-spacing: 3px;
             text-transform: uppercase;
+            color: #555;
         }
 
         .chat-container {
             flex: 1;
             display: flex;
             flex-direction: column;
-            max-width: 800px;
+            max-width: 720px;
             margin: 0 auto;
             width: 100%;
-            height: calc(100vh - 80px);
+            height: calc(100vh - 73px);
         }
 
         .chat-messages {
             flex: 1;
-            padding: 40px;
+            padding: 40px 32px 20px;
             overflow-y: auto;
             display: flex;
             flex-direction: column;
-            gap: 30px;
+            gap: 32px;
         }
 
-        .message {
-            max-width: 80%;
-            animation: fadeIn 0.3s ease;
+        /* Agent message — editorial card style */
+        .message.agent {
+            align-self: flex-start;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+        .message-header {
+            font-size: 0.7rem;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: #888;
+            margin-bottom: 8px;
+            padding-left: 2px;
         }
 
+        .message.agent .content {
+            background: #fff;
+            color: #1a1a1a;
+            padding: 28px 32px;
+            border-radius: 2px;
+            line-height: 1.8;
+            font-size: 1rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+            border-top: 2px solid #1a1a1a;
+        }
+
+        .message.agent .content p {
+            margin-bottom: 16px;
+        }
+
+        .message.agent .content p:last-child {
+            margin-bottom: 0;
+        }
+
+        .message.agent .content blockquote {
+            margin: 20px 0;
+            padding: 16px 24px;
+            background: #f5f4f1;
+            border-left: 2px solid #bbb;
+            font-style: italic;
+            color: #333;
+            border-radius: 0;
+        }
+
+        .message.agent .content em {
+            font-style: italic;
+        }
+
+        .message.agent .content strong {
+            font-weight: bold;
+        }
+
+        /* User message — dark bubble */
         .message.user {
             align-self: flex-end;
         }
@@ -70,95 +113,101 @@
         .message.user .content {
             background: #1a1a1a;
             color: #fff;
-            padding: 20px 25px;
-            border-radius: 18px 18px 2px 18px;
-            line-height: 1.7;
-            font-size: 1.05rem;
+            padding: 16px 24px;
+            border-radius: 20px 20px 4px 20px;
+            line-height: 1.6;
+            font-size: 1rem;
+            max-width: 85%;
         }
 
-        .message.agent {
-            align-self: flex-start;
-        }
-
-        .message.agent .content {
-            background: #f8f8f8;
-            color: #222;
-            padding: 20px 25px;
-            border-radius: 18px 18px 18px 2px;
-            line-height: 1.7;
-            font-size: 1.05rem;
-            border-left: 3px solid #1a1a1a;
-        }
-
-        .message.agent .content blockquote {
-            margin: 15px 0;
-            padding: 10px 15px;
-            background: #f0f0f0;
-            border-left: 2px solid #999;
+        /* Loading state */
+        .message.agent .loading .content {
             font-style: italic;
-            color: #444;
+            color: #888;
+            padding: 28px 32px;
+            background: #f5f4f1;
+            border-radius: 2px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.04);
         }
 
-        .message.agent .content p {
-            margin-bottom: 15px;
-        }
-
-        .message.agent .content p:last-child {
-            margin-bottom: 0;
-        }
-
-        .message-label {
-            display: none;
-        }
-
-        .chat-input-area {
-            padding: 30px;
-            border-top: 1px solid #e0e0e0;
+        .input-area {
+            padding: 24px 32px;
+            border-top: 1px solid #e0ddd8;
             background: #fff;
         }
 
-        .input-wrapper {
+        .input-row {
             display: flex;
-            gap: 15px;
+            gap: 12px;
+            align-items: flex-end;
         }
 
         textarea {
             flex: 1;
-            padding: 15px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
+            padding: 14px 18px;
+            border: 1px solid #d5d3ce;
+            border-radius: 6px;
             font-family: 'Georgia', serif;
             font-size: 1rem;
             resize: none;
-            min-height: 60px;
+            min-height: 52px;
             max-height: 200px;
+            background: #faf9f7;
+            color: #1a1a1a;
+            line-height: 1.5;
         }
 
         textarea:focus {
             outline: none;
             border-color: #1a1a1a;
+            background: #fff;
+        }
+
+        textarea::placeholder {
+            color: #aaa;
         }
 
         button {
-            padding: 12px 30px;
-            font-size: 1rem;
+            padding: 14px 28px;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
             border: 1px solid #1a1a1a;
             background: #1a1a1a;
             color: #fff;
             cursor: pointer;
             font-family: 'Georgia', serif;
-            font-weight: 600;
-            border-radius: 8px;
-            transition: all 0.2s ease;
+            font-weight: normal;
+            border-radius: 6px;
+            transition: background 0.15s ease;
+            white-space: nowrap;
         }
 
         button:hover {
-            background: #000;
-            transform: translateY(-1px);
+            background: #333;
         }
 
         button:active {
-            transform: translateY(0);
+            background: #000;
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: default;
+        }
+
+        /* Scrollbar styling */
+        .chat-messages::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .chat-messages::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .chat-messages::-webkit-scrollbar-thumb {
+            background: #d5d3ce;
+            border-radius: 3px;
         }
     </style>
 </head>
@@ -171,8 +220,8 @@
         <div class="chat-messages" id="chat-messages">
             <!-- Messages will be added here -->
         </div>
-        <div class="chat-input-area">
-            <div class="input-wrapper">
+        <div class="input-area">
+            <div class="input-row">
                 <textarea id="user-input" placeholder="Type your response..." autocomplete="off"></textarea>
                 <button id="send-btn">Send</button>
             </div>
@@ -197,11 +246,61 @@
             }
         }
 
+        /**
+         * Clean up agent text: strip markdown artifacts, preserve paragraphs,
+         * and convert to safe HTML.
+         */
+        function renderText(text) {
+            // Trim and strip trailing AWAITING_USER_INPUT / COMPLETED markers
+            text = text.trim().replace(/^(AWAITING_USER_INPUT|COMPLETED)\s*$/gi, '');
+
+            // Split on double-newlines to get paragraphs
+            const paragraphs = text.split(/\n\n+/);
+
+            return paragraphs.map(para => {
+                // Trim
+                para = para.trim();
+                if (!para) return '';
+
+                // Strip inline code backticks entirely
+                para = para.replace(/`([^`]*)`/g, '$1');
+
+                // Strip inline single-asterisk emphasis (*text*)
+                para = para.replace(/\*([^*]+)\*/g, '<em>$1</em>');
+
+                // Strip double-asterisk bold (**text**)
+                para = para.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+
+                // Detect blockquote lines (starting with " or >)
+                const lines = para.split('\n');
+                const isBlockquote = lines.some(l => /^["»]/.test(l.trim()));
+
+                if (isBlockquote) {
+                    const content = lines.map(l => l.replace(/^["»]\s*/, '')).join(' ');
+                    return `<blockquote>${content}</blockquote>`;
+                }
+
+                return `<p>${para}</p>`;
+            }).join('');
+        }
+
         function addMessage(role, text) {
             const chat = document.getElementById('chat-messages');
             const msgDiv = document.createElement('div');
             msgDiv.className = `message ${role}`;
-            msgDiv.innerHTML = `<div class="content">${text}</div>`;
+
+            if (role === 'agent') {
+                const header = document.createElement('div');
+                header.className = 'message-header';
+                header.textContent = 'Stoic Guide';
+                msgDiv.appendChild(header);
+            }
+
+            const content = document.createElement('div');
+            content.className = 'content';
+            content.innerHTML = renderText(text);
+            msgDiv.appendChild(content);
+
             chat.appendChild(msgDiv);
             chat.scrollTop = chat.scrollHeight;
         }
@@ -223,79 +322,65 @@
                 userMessage.contextId = contextId;
             }
 
-           // Show loading
+            // Show loading
             const chat = document.getElementById('chat-messages');
             const loadingDiv = document.createElement('div');
-            loadingDiv.className = 'message agent';
+            loadingDiv.className = 'message agent loading';
             loadingDiv.innerHTML = `<div class="content">Consulting the Meditations...</div>`;
             chat.appendChild(loadingDiv);
             chat.scrollTop = chat.scrollHeight;
 
             try {
-                // Use sendMessageStream for real-time updates instead of sendMessage
                 const stream = client.sendMessageStream({ message: userMessage });
 
-                // Remove loading when we get the first real response
-                let firstResponseReceived = false;
                 let fullResponse = '';
+                let hasFinalState = false;
 
                 for await (const event of stream) {
                     console.log('Received event:', event.kind, event);
 
                     if (event.kind === 'status-update') {
-                        // Update status (working, completed, input-required, etc.)
-                        console.log(`Status: ${event.status.state} (Task: ${event.taskId})`);
-
-                        // If this is the working status, update the loading message
                         if (event.status.state === 'working' && event.status.message) {
                             const workingText = event.status.message.parts[0]?.text || '';
                             loadingDiv.innerHTML = `<div class="content">Consulting the Meditations...<br><small style="opacity:0.7">${workingText}</small></div>`;
                         }
 
-                        // If this is a final status with a message, append it
-                           if (event.final && event.status.message) {
-                                const agentText = event.status.message.parts
-                                    .map((p) => p.text || '')
-                                    .join('\n');
-                                if (agentText) {
-                                    fullResponse = fullResponse ? fullResponse + '\n\n' + agentText : agentText;
-                                }
-                            }
-                    } else if (event.kind === 'message') {
-                        // Direct message event
-                           const messageText = event.parts
+                        // Only capture from final state once to avoid double-counting
+                        if (event.final && event.status.message && !hasFinalState) {
+                            hasFinalState = true;
+                            const agentText = event.status.message.parts
                                 .map((p) => p.text || '')
                                 .join('\n');
-                            if (messageText) {
-                                fullResponse = fullResponse ? fullResponse + '\n\n' + messageText : messageText;
+                            if (agentText) {
+                                fullResponse = agentText;
                             }
-                    } else if (event.kind === 'task') {
-                        // Task event - extract any message
-                        if (event.status?.message) {
-                            const taskMessageText = event.status.message.parts
-                                .map((p) => p.text || '')
-                                .join('\n');
-                            if (taskMessageText) {
-                                fullResponse = fullResponse ? fullResponse + '\n\n' + taskMessageText : taskMessageText;
-                            }
+                        }
+                    } else if (event.kind === 'message' && !hasFinalState) {
+                        // Only capture from message event if we haven't gotten final state yet
+                        const messageText = event.parts
+                            .map((p) => p.text || '')
+                            .join('\n');
+                        if (messageText) {
+                            fullResponse = messageText;
+                        }
+                    } else if (event.kind === 'task' && event.status?.message && !hasFinalState) {
+                        const taskMessageText = event.status.message.parts
+                            .map((p) => p.text || '')
+                            .join('\n');
+                        if (taskMessageText) {
+                            fullResponse = taskMessageText;
                         }
                     }
 
-                    // Update contextId if provided
                     if (event.contextId) {
                         contextId = event.contextId;
                     }
 
-                    // Show partial response as it comes in (streaming effect)
-                    if (fullResponse && !firstResponseReceived) {
-                        loadingDiv.innerHTML = `<div class="content">${fullResponse}</div>`;
-                        firstResponseReceived = true;
-                    } else if (fullResponse) {
-                        loadingDiv.innerHTML = `<div class="content">${fullResponse}</div>`;
+                    if (fullResponse) {
+                        loadingDiv.innerHTML = `<div class="content">${renderText(fullResponse)}</div>`;
                     }
                 }
 
-                // Remove loading and show final response
                 chat.removeChild(loadingDiv);
                 if (fullResponse) {
                     addMessage('agent', fullResponse);
@@ -310,8 +395,9 @@
 
         async function startNewDialogue() {
             const initialPrompt = "I seek guidance from the Stoic wisdom of Marcus Aurelius. What should I reflect on today?";
-            
-            addMessage('agent', initialPrompt);
+
+            // Show initial prompt as user message (not agent — the user is initiating)
+            addMessage('user', initialPrompt);
 
             const userMessage = {
                 messageId: crypto.randomUUID(),
@@ -320,34 +406,47 @@
                 kind: 'message',
             };
 
+            // Show loading
+            const chat = document.getElementById('chat-messages');
+            const loadingDiv = document.createElement('div');
+            loadingDiv.className = 'message agent loading';
+            loadingDiv.innerHTML = `<div class="content">Consulting the Meditations...</div>`;
+            chat.appendChild(loadingDiv);
+            chat.scrollTop = chat.scrollHeight;
+
             try {
-                // Use streaming for the initial dialogue as well
                 const stream = client.sendMessageStream({ message: userMessage });
                 let fullResponse = '';
+                let hasFinalState = false;
 
                 for await (const event of stream) {
                     console.log('Initial event:', event.kind);
 
-                    if (event.kind === 'status-update' && event.final && event.status.message) {
-                        const agentText = event.status.message.parts
-                            .map((p) => p.text || '')
-                            .join('\n');
-                        if (agentText) {
-                            fullResponse += agentText;
+                    if (event.kind === 'status-update') {
+                        // Only capture the final state once to avoid double-counting
+                        if (event.final && event.status.message && !hasFinalState) {
+                            hasFinalState = true;
+                            const agentText = event.status.message.parts
+                                .map((p) => p.text || '')
+                                .join('\n');
+                            if (agentText) {
+                                fullResponse = agentText;
+                            }
                         }
-                    } else if (event.kind === 'message') {
+                    } else if (event.kind === 'message' && !hasFinalState) {
+                        // Only capture if we haven't gotten the final state yet
                         const msgText = event.parts
                             .map((p) => p.text || '')
                             .join('\n');
                         if (msgText) {
-                            fullResponse += msgText;
+                            fullResponse = msgText;
                         }
-                    } else if (event.kind === 'task' && event.status?.message) {
+                    } else if (event.kind === 'task' && event.status?.message && !hasFinalState) {
                         const taskMsg = event.status.message.parts
                             .map((p) => p.text || '')
                             .join('\n');
                         if (taskMsg) {
-                            fullResponse += taskMsg;
+                            fullResponse = taskMsg;
                         }
                     }
 
@@ -356,12 +455,15 @@
                     }
                 }
 
+                chat.removeChild(loadingDiv);
                 if (fullResponse) {
                     addMessage('agent', fullResponse);
                 }
 
             } catch (error) {
+                try { chat.removeChild(loadingDiv); } catch (e) {}
                 console.error('Error starting dialogue:', error);
+                addMessage('agent', 'Error connecting to Stoic Guide.');
             }
         }
 
@@ -382,7 +484,7 @@
             if (text.trim()) {
                 sendMessageToAgent(text);
                 input.value = '';
-                input.style.height = '60px';
+                input.style.height = '52px';
             }
         });
 
@@ -393,13 +495,13 @@
                 if (input.value.trim()) {
                     sendMessageToAgent(input.value);
                     input.value = '';
-                    input.style.height = '60px';
+                    input.style.height = '52px';
                 }
             }
         });
 
         document.getElementById('user-input').addEventListener('input', function() {
-            this.style.height = '60px';
+            this.style.height = '52px';
             this.style.height = Math.min(this.scrollHeight, 200) + 'px';
         });
     </script>
