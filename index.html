@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Stoic Dialogue</title>
     <style>
+        /* === Light mode (default) === */
         * {
             margin: 0;
             padding: 0;
@@ -235,6 +236,141 @@
         .chat-messages::-webkit-scrollbar-thumb {
             background: #d5d3ce;
             border-radius: 3px;
+        }
+
+        /* === Dark mode === */
+        @media (prefers-color-scheme: dark) {
+            body {
+                background: #1a1a1e;
+                color: #d4d0c8;
+            }
+
+            header {
+                border-bottom: 1px solid #2e2e33;
+                background: #141417;
+            }
+
+            h1 {
+                color: #999;
+            }
+
+            .chat-container {
+                height: calc(100vh - 69px);
+            }
+
+            .message-header {
+                color: #666;
+            }
+
+            .message.agent .content {
+                background: #222226;
+                color: #d4d0c8;
+                box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+                border-top: 2px solid #888;
+            }
+
+            .message.agent .content strong {
+                font-weight: bold;
+                color: #e8e4dc;
+            }
+
+            .message.agent .content ul,
+            .message.agent .content ol {
+                margin: 16px 0;
+                padding-left: 24px;
+            }
+
+            .message.agent .content li {
+                margin-bottom: 8px;
+                line-height: 1.7;
+            }
+
+            .message.agent .content ul {
+                list-style: none;
+                padding-left: 16px;
+            }
+
+            .message.agent .content ul li::before {
+                content: "–";
+                margin-right: 8px;
+                color: #666;
+            }
+
+            .message.agent .content blockquote {
+                background: #2a2a2f;
+                border-left: 2px solid #555;
+                color: #b0aca4;
+            }
+
+            .message.agent .content p {
+                margin-bottom: 16px;
+            }
+
+            .message.agent .content p:last-child {
+                margin-bottom: 0;
+            }
+
+            .message.agent .content h1,
+            .message.agent .content h2,
+            .message.agent .content h3,
+            .message.agent .content h4 {
+                margin: 24px 0 12px;
+                font-size: 1.1rem;
+                font-weight: normal;
+                letter-spacing: 0.5px;
+            }
+
+            .message.user .content {
+                background: #3a3a40;
+                color: #e8e4dc;
+            }
+
+            .message.agent .loading .content {
+                color: #666;
+                background: #2a2a2f;
+            }
+
+            .input-area {
+                border-top: 1px solid #2e2e33;
+                background: #141417;
+            }
+
+            textarea {
+                border: 1px solid #3a3a40;
+                background: #1e1e22;
+                color: #d4d0c8;
+            }
+
+            textarea:focus {
+                border-color: #888;
+                background: #222226;
+            }
+
+            textarea::placeholder {
+                color: #555;
+            }
+
+            button {
+                border: 1px solid #666;
+                background: #3a3a40;
+                color: #d4d0c8;
+            }
+
+            button:hover {
+                background: #4a4a50;
+            }
+
+            button:active {
+                background: #555;
+            }
+
+            button:disabled {
+                opacity: 0.4;
+            }
+
+            .chat-messages::-webkit-scrollbar-thumb {
+                background: #3a3a40;
+            }
         }
     </style>
 </head>
