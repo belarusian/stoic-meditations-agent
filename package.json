@@ -8,7 +8,8 @@
     "start": "node dist/agent.js",
     "build": "tsc",
     "dev": "ts-node src/agent.ts",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "repository": {
     "type": "git",
@@ -35,6 +36,9 @@
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
     "@types/node": "^25.9.1",
-    "typescript": "^6.0.3"
+    "execa": "^9.6.1",
+    "got": "^15.0.5",
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.7"
   }
 }

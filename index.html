@@ -480,7 +480,7 @@
                 const stream = client.sendMessageStream({ message: userMessage });
 
                 let fullResponse = '';
-                let hasFinalState = false;
+                let lastFinalState = null;
 
                 for await (const event of stream) {
                     console.log('Received event:', event.kind, event);
@@ -491,9 +491,9 @@
                             loadingDiv.innerHTML = `<div class="content">Consulting the Meditations...<br><small style="opacity:0.7">${workingText}</small></div>`;
                         }
 
-                        // Only capture from final state once to avoid double-counting
-                        if (event.final && event.status.message && !hasFinalState) {
-                            hasFinalState = true;
+                        // Only act on the final state once, ignoring duplicates
+                        if (event.final && event.status.message && event.status.message.messageId !== lastFinalState) {
+                            lastFinalState = event.status.message.messageId;
                             const agentText = event.status.message.parts
                                 .map((p) => p.text || '')
                                 .join('\n');
@@ -501,15 +501,14 @@
                                 fullResponse = agentText;
                             }
                         }
-                    } else if (event.kind === 'message' && !hasFinalState) {
-                        // Only capture from message event if we haven't gotten final state yet
+                    } else if (event.kind === 'message') {
                         const messageText = event.parts
                             .map((p) => p.text || '')
                             .join('\n');
                         if (messageText) {
                             fullResponse = messageText;
                         }
-                    } else if (event.kind === 'task' && event.status?.message && !hasFinalState) {
+                    } else if (event.kind === 'task' && event.status?.message) {
                         const taskMessageText = event.status.message.parts
                             .map((p) => p.text || '')
                             .join('\n');
@@ -518,7 +517,7 @@
                         }
                     }
 
-                   if (event.contextId) {
+                    if (event.contextId) {
                         contextId = event.contextId;
                     }
                     if (event.taskId) {
@@ -533,6 +532,13 @@
                 chat.removeChild(loadingDiv);
                 if (fullResponse) {
                     addMessage('agent', fullResponse);
+                }
+
+                // Reset taskId if the agent finished the conversation
+                // (COMPLETED state locks the task, preventing further messages)
+                const finished = fullResponse.includes('COMPLETED') && !fullResponse.includes('AWAITING_USER_INPUT');
+                if (finished) {
+                    taskId = null;
                 }
 
             } catch (error) {
@@ -566,15 +572,15 @@
             try {
                 const stream = client.sendMessageStream({ message: userMessage });
                 let fullResponse = '';
-                let hasFinalState = false;
+                let lastFinalState = null;
 
                 for await (const event of stream) {
                     console.log('Initial event:', event.kind);
 
                     if (event.kind === 'status-update') {
-                        // Only capture the final state once to avoid double-counting
-                        if (event.final && event.status.message && !hasFinalState) {
-                            hasFinalState = true;
+                        // Only act on the final state once, ignoring duplicates
+                        if (event.final && event.status.message && event.status.message.messageId !== lastFinalState) {
+                            lastFinalState = event.status.message.messageId;
                             const agentText = event.status.message.parts
                                 .map((p) => p.text || '')
                                 .join('\n');
@@ -582,15 +588,14 @@
                                 fullResponse = agentText;
                             }
                         }
-                    } else if (event.kind === 'message' && !hasFinalState) {
-                        // Only capture if we haven't gotten the final state yet
+                    } else if (event.kind === 'message') {
                         const msgText = event.parts
                             .map((p) => p.text || '')
                             .join('\n');
                         if (msgText) {
                             fullResponse = msgText;
                         }
-                    } else if (event.kind === 'task' && event.status?.message && !hasFinalState) {
+                    } else if (event.kind === 'task' && event.status?.message) {
                         const taskMsg = event.status.message.parts
                             .map((p) => p.text || '')
                             .join('\n');
@@ -599,7 +604,7 @@
                         }
                     }
 
-                   if (event.contextId) {
+                    if (event.contextId) {
                         contextId = event.contextId;
                     }
                     if (event.taskId) {
@@ -610,6 +615,12 @@
                 chat.removeChild(loadingDiv);
                 if (fullResponse) {
                     addMessage('agent', fullResponse);
+                }
+
+                // Reset taskId if the agent finished the conversation
+                const finished = fullResponse.includes('COMPLETED') && !fullResponse.includes('AWAITING_USER_INPUT');
+                if (finished) {
+                    taskId = null;
                 }
 
             } catch (error) {
