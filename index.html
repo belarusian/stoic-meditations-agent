@@ -397,6 +397,7 @@
 
         let client = null;
         let contextId = null;
+        let taskId = null;
 
         async function connectToAgent() {
             try {
@@ -463,6 +464,9 @@
             if (contextId) {
                 userMessage.contextId = contextId;
             }
+            if (taskId) {
+                userMessage.taskId = taskId;
+            }
 
             // Show loading
             const chat = document.getElementById('chat-messages');
@@ -514,8 +518,11 @@
                         }
                     }
 
-                    if (event.contextId) {
+                   if (event.contextId) {
                         contextId = event.contextId;
+                    }
+                    if (event.taskId) {
+                        taskId = event.taskId;
                     }
 
                     if (fullResponse) {
@@ -592,8 +599,11 @@
                         }
                     }
 
-                    if (event.contextId) {
+                   if (event.contextId) {
                         contextId = event.contextId;
+                    }
+                    if (event.taskId) {
+                        taskId = event.taskId;
                     }
                 }
 
