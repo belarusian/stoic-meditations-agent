@@ -397,6 +397,7 @@
 
         let client = null;
         let contextId = null;
+        let taskId = null;
 
         async function connectToAgent() {
             try {
@@ -463,6 +464,9 @@
             if (contextId) {
                 userMessage.contextId = contextId;
             }
+            if (taskId) {
+                userMessage.taskId = taskId;
+            }
 
             // Show loading
             const chat = document.getElementById('chat-messages');
@@ -516,6 +520,9 @@
 
                     if (event.contextId) {
                         contextId = event.contextId;
+                    }
+                    if (event.taskId) {
+                        taskId = event.taskId;
                     }
 
                     if (fullResponse) {
@@ -585,11 +592,29 @@
                         }
                     } else if (event.kind === 'task' && event.status?.message && !hasFinalState) {
                         const taskMsg = event.status.message.parts
-                            .map((p) => p.text || '')
+                           .map((p) => p.text || '')
                             .join('\n');
                         if (taskMsg) {
                             fullResponse = taskMsg;
                         }
+                    }
+
+                    if (event.contextId) {
+                        contextId = event.contextId;
+                    }
+                    if (event.taskId) {
+                        taskId = event.taskId;
+                    }
+                }
+
+                chat.removeChild(loadingDiv);
+                if (fullResponse) {
+                    addMessage('agent', fullResponse);
+                }
+            } catch (error) {
+                console.error('Error starting dialogue:', error);
+            }
+        }
                     }
 
                     if (event.contextId) {
