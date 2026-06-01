@@ -119,6 +119,15 @@ class StoicAgentExecutor {
                 meditations: meditationsContext || 'Meditations context not available.'
             }, {
                 messages,
+                // llama.cpp repetition / presence / frequency penalties
+                // repeat_penalty: 1.0 = no effect, >1.0 discourages repetition
+                // presence_penalty / frequency_penalty: penalize repeated tokens
+                // compat-oai forwards unknown keys (restOfConfig) to the API body
+                config: {
+                    repeat_penalty: 1.1,
+                    presence_penalty: 0.5,
+                    frequency_penalty: 0.5,
+                },
             });
             if (this.cancelledTasks.has(taskId)) {
                 console.log(`[StoicAgentExecutor] Request cancelled for task: ${taskId}`);

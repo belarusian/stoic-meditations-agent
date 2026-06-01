@@ -20,8 +20,8 @@ export const ai = genkit({
     plugins: [
         openAICompatible({
             name: "llama-cpp",
-            apiKey: "dummy", // Required, but can be a placeholder for local servers
-            baseURL: "http://10.106.1.89:8080/v1",
+            apiKey: process.env.LLM_API_KEY || "dummy",
+            baseURL: process.env.LLM_BASE_URL || "http://10.106.1.89:8080/v1",
         }),
     ],
     model: llamaCppModel,
