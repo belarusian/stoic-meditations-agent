@@ -78,8 +78,9 @@ const appScript = `
             role: 'user',
             parts: [{ kind: 'text', text }],
         };
-        if (contextId) userMessage.contextId = contextId;
-        if (taskId) userMessage.taskId = taskId;
+         if (contextId) userMessage.contextId = contextId;
+            if (taskId) userMessage.taskId = taskId;
+            console.log('[client] Sending message, taskId:', taskId, 'contextId:', contextId);
 
         loadingDiv = document.createElement('div');
         loadingDiv.className = 'message agent loading';
@@ -114,7 +115,12 @@ const appScript = `
             chat.removeChild(loadingDiv);
             loadingDiv = null;
             if (response) addMessage('agent', response);
-            if (isConversationFinished(response)) taskId = null;
+            // When the agent explicitly finishes, reset taskId so the next
+            // message gets a fresh task (the old one is locked by the SDK).
+            if (isConversationFinished(response)) {
+                console.log('[client] Agent finished conversation, resetting taskId');
+                taskId = null;
+            }
         } catch (error) {
             if (loadingDiv) { try { chat.removeChild(loadingDiv); } catch (e) {} loadingDiv = null; }
             console.error('Error with agent:', error);
@@ -158,7 +164,6 @@ const appScript = `
             chat.removeChild(loadingDiv);
             loadingDiv = null;
             if (response) addMessage('agent', response);
-            if (isConversationFinished(response)) taskId = null;
         } catch (error) {
             if (loadingDiv) { try { chat.removeChild(loadingDiv); } catch (e) {} loadingDiv = null; }
             console.error('Error starting dialogue:', error);

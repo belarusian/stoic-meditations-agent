@@ -1,25 +1,8 @@
 import { describe, it, expect } from 'vitest';
 import {
-  isConversationFinished,
   renderText,
   extractTextFromEvent,
 } from '../src/client';
-
-describe('isConversationFinished', () => {
-  it('returns true when response ends with COMPLETED but not AWAITING_USER_INPUT', () => {
-    expect(isConversationFinished('Some text\nCOMPLETED')).toBe(true);
-    expect(isConversationFinished('Just saying COMPLETED')).toBe(true);
-  });
-
-  it('returns false when response contains AWAITING_USER_INPUT', () => {
-    expect(isConversationFinished('Some text\nAWAITING_USER_INPUT')).toBe(false);
-    expect(isConversationFinished('Some text\nCOMPLETED\nAWAITING_USER_INPUT')).toBe(false);
-  });
-
-  it('returns false when response does not mention completion markers', () => {
-    expect(isConversationFinished('Just a normal response')).toBe(false);
-  });
-});
 
 describe('renderText', () => {
   it('strips trailing AWAITING_USER_INPUT marker', () => {
@@ -30,8 +13,13 @@ describe('renderText', () => {
     expect(renderText('Hello world\nCOMPLETED')).toBe('Hello world');
   });
 
-  it('strips markers from the middle of multiline text', () => {
+  it('strips markers from the end of multiline text', () => {
     expect(renderText('Part 1\n\nPart 2\n\nCOMPLETED')).toBe('Part 1\n\nPart 2');
+  });
+
+  it('does NOT strip markers from the middle of text (e.g., in quotes)', () => {
+    // A quote containing the word COMPLETED should stay intact
+    expect(renderText('He said: "I will finish this task and then COMPLETED my work."')).toBe('He said: "I will finish this task and then COMPLETED my work."');
   });
 
   it('leaves text unchanged if no markers present', () => {

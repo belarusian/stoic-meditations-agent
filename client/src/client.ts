@@ -37,15 +37,6 @@ export function extractTextFromEvent(event: StreamEvent): string {
 }
 
 /**
- * Determine if an agent response indicates the conversation is finished.
- * The agent ends messages with AWAITING_USER_INPUT or COMPLETED.
- * COMPLETED without AWAITING_USER_INPUT means the conversation is done.
- */
-export function isConversationFinished(response: string): boolean {
-  return response.includes('COMPLETED') && !response.includes('AWAITING_USER_INPUT');
-}
-
-/**
  * Clean and format agent text: strip control markers.
  */
 export function renderText(text: string): string {
@@ -56,7 +47,12 @@ export function renderText(text: string): string {
  * Process a single A2A event stream into a response string.
  * Handles deduplication of final states via messageId.
  *
- * @returns object with { response, contextId, taskId, finished }
+ * NOTE: This function does NOT reset taskId or stop listening for events.
+ * The A2A task stays alive so the agent always has full conversation history.
+ * The agent's AWAITING_USER_INPUT / COMPLETED markers are prompt instructions
+ * for the agent itself — they do NOT control the task lifecycle.
+ *
+ * @returns object with { response, contextId, taskId }
  */
 export async function processEventStream(
   stream: AsyncGenerator<StreamEvent, void, unknown>,
@@ -66,7 +62,6 @@ export async function processEventStream(
   response: string;
   contextId: string | null;
   taskId: string | null;
-  finished: boolean;
 }> {
   let response = '';
   let lastFinalState: string | null = null;
@@ -105,12 +100,19 @@ export async function processEventStream(
     }
   }
 
-  const finished = isConversationFinished(response);
-  return { response, contextId, taskId, finished };
+  return { response, contextId, taskId };
 }
 
 export async function connectToAgent(url: string): Promise<ClientState> {
   const factory = new ClientFactory();
   const client = await factory.createFromUrl(url);
   return { client, contextId: null, taskId: null };
+}
+
+/**
+ * Check if the agent explicitly ended the conversation.
+ * If so, the A2A SDK locks the task. The next message needs a fresh task.
+ */
+export function isConversationFinished(response: string): boolean {
+  return response.includes('COMPLETED') && !response.includes('AWAITING_USER_INPUT');
 }
