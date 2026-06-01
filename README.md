@@ -29,7 +29,7 @@ npm start               # Start agent server on localhost:41242
 
 ```bash
 npm run build:client    # Run tests + bundle → dist/index.html + dist/client.js
-npx serve . -l 3000     # Serve from dist/ on localhost:3000
+npx serve dist -l 3000  # Serve built assets from dist/ on localhost:3000
 ```
 
 ### Both together

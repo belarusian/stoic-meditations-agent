@@ -44,7 +44,7 @@ const appScript = `
     import { marked } from 'https://esm.sh/marked';
 
     // Use the bundled client module for testable logic
-    import { extractTextFromEvent, isConversationFinished, renderText } from './dist/client.js';
+    import { extractTextFromEvent, isConversationFinished, renderText } from './client.js';
 
     let client = null;
     let contextId = null;
