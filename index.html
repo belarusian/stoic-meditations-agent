@@ -398,35 +398,47 @@
         let client = null;
         let contextId = null;
         let taskId = null;
+        let loadingDiv = null;
 
-        async function connectToAgent() {
-            try {
-                const factory = new ClientFactory();
-                client = await factory.createFromUrl('http://localhost:41242');
-                console.log('Connected to Stoic Guide agent');
-                return true;
-            } catch (error) {
-                console.error('Failed to connect to agent:', error);
-                return false;
+        /**
+         * Extract text from an A2A stream event.
+         * Mirrors the logic in src/client.ts for the browser context.
+         */
+        function extractTextFromEvent(event) {
+            if (event.kind === 'status-update' && event.status?.message) {
+                return event.status.message.parts
+                    .map((p) => p.text || '')
+                    .join('\n');
             }
+            if (event.kind === 'message') {
+                return event.parts.map((p) => p.text || '').join('\n');
+            }
+            if (event.kind === 'task' && event.status?.message) {
+                return event.status.message.parts
+                    .map((p) => p.text || '')
+                    .join('\n');
+            }
+            return '';
         }
 
         /**
-         * Clean up agent text: strip control markers, then convert markdown to HTML.
+         * Determine if an agent response indicates the conversation is finished.
          */
-        function renderText(text) {
-            // Trim and strip trailing AWAITING_USER_INPUT / COMPLETED markers
-            text = text.trim().replace(/(?:^|\n)\s*(AWAITING_USER_INPUT|COMPLETED)\s*$/gi, '');
-
-            // Configure marked for our use case
-            const html = marked.parse(text, {
-                breaks: true,
-                gfm: true,
-            });
-
-            return html;
+        function isConversationFinished(response) {
+            return response.includes('COMPLETED') && !response.includes('AWAITING_USER_INPUT');
         }
 
+        /**
+         * Clean and format agent text: strip control markers, then convert markdown to HTML.
+         */
+        function renderText(text) {
+            text = text.trim().replace(/(?:^|\n)\s*(AWAITING_USER_INPUT|COMPLETED)\s*$/gi, '');
+            return marked.parse(text, { breaks: true, gfm: true });
+        }
+
+        /**
+         * Add a rendered message to the chat.
+         */
         function addMessage(role, text) {
             const chat = document.getElementById('chat-messages');
             const msgDiv = document.createElement('div');
@@ -448,29 +460,28 @@
             chat.scrollTop = chat.scrollHeight;
         }
 
-        async function sendMessageToAgent(text) {
+        /**
+         * Send a user message to the agent and process the event stream.
+         */
+        async function sendUserMessage(text) {
             if (!client || !text.trim()) return;
 
             // Add user message to chat
             addMessage('user', text);
 
             const userMessage = {
+                kind: 'message',
                 messageId: crypto.randomUUID(),
                 role: 'user',
-                parts: [{ kind: 'text', text: text }],
-                kind: 'message',
+                parts: [{ kind: 'text', text }],
             };
 
-            if (contextId) {
-                userMessage.contextId = contextId;
-            }
-            if (taskId) {
-                userMessage.taskId = taskId;
-            }
+            if (contextId) userMessage.contextId = contextId;
+            if (taskId) userMessage.taskId = taskId;
 
             // Show loading
             const chat = document.getElementById('chat-messages');
-            const loadingDiv = document.createElement('div');
+            loadingDiv = document.createElement('div');
             loadingDiv.className = 'message agent loading';
             loadingDiv.innerHTML = `<div class="content">Consulting the Meditations...</div>`;
             chat.appendChild(loadingDiv);
@@ -479,91 +490,73 @@
             try {
                 const stream = client.sendMessageStream({ message: userMessage });
 
-                let fullResponse = '';
+                let response = '';
                 let lastFinalState = null;
 
                 for await (const event of stream) {
-                    console.log('Received event:', event.kind, event);
-
                     if (event.kind === 'status-update') {
-                        if (event.status.state === 'working' && event.status.message) {
+                        if (event.status?.state === 'working' && event.status.message) {
                             const workingText = event.status.message.parts[0]?.text || '';
                             loadingDiv.innerHTML = `<div class="content">Consulting the Meditations...<br><small style="opacity:0.7">${workingText}</small></div>`;
                         }
 
-                        // Only act on the final state once, ignoring duplicates
-                        if (event.final && event.status.message && event.status.message.messageId !== lastFinalState) {
+                        if (event.final && event.status?.message && event.status.message.messageId !== lastFinalState) {
                             lastFinalState = event.status.message.messageId;
-                            const agentText = event.status.message.parts
-                                .map((p) => p.text || '')
-                                .join('\n');
-                            if (agentText) {
-                                fullResponse = agentText;
-                            }
+                            const text = extractTextFromEvent(event);
+                            if (text) response = text;
                         }
-                    } else if (event.kind === 'message') {
-                        const messageText = event.parts
-                            .map((p) => p.text || '')
-                            .join('\n');
-                        if (messageText) {
-                            fullResponse = messageText;
-                        }
-                    } else if (event.kind === 'task' && event.status?.message) {
-                        const taskMessageText = event.status.message.parts
-                            .map((p) => p.text || '')
-                            .join('\n');
-                        if (taskMessageText) {
-                            fullResponse = taskMessageText;
-                        }
+                    } else {
+                        const text = extractTextFromEvent(event);
+                        if (text) response = text;
                     }
 
-                    if (event.contextId) {
-                        contextId = event.contextId;
-                    }
-                    if (event.taskId) {
-                        taskId = event.taskId;
-                    }
+                    if (event.contextId) contextId = event.contextId;
+                    if (event.taskId) taskId = event.taskId;
 
-                    if (fullResponse) {
-                        loadingDiv.innerHTML = `<div class="content">${renderText(fullResponse)}</div>`;
+                    if (response) {
+                        loadingDiv.innerHTML = `<div class="content">${renderText(response)}</div>`;
                     }
                 }
 
                 chat.removeChild(loadingDiv);
-                if (fullResponse) {
-                    addMessage('agent', fullResponse);
+                loadingDiv = null;
+
+                if (response) {
+                    addMessage('agent', response);
                 }
 
                 // Reset taskId if the agent finished the conversation
-                // (COMPLETED state locks the task, preventing further messages)
-                const finished = fullResponse.includes('COMPLETED') && !fullResponse.includes('AWAITING_USER_INPUT');
-                if (finished) {
+                if (isConversationFinished(response)) {
                     taskId = null;
                 }
 
             } catch (error) {
-                try { chat.removeChild(loadingDiv); } catch (e) {}
+                if (loadingDiv) {
+                    try { chat.removeChild(loadingDiv); } catch (e) {}
+                    loadingDiv = null;
+                }
                 console.error('Error with agent:', error);
                 addMessage('agent', 'Error: Could not connect to Stoic Guide. Check that the agent is running.');
             }
         }
 
+        /**
+         * Start a new dialogue session.
+         */
         async function startNewDialogue() {
             const initialPrompt = "I seek guidance from the Stoic wisdom of Marcus Aurelius. What should I reflect on today?";
 
-            // Show initial prompt as user message (not agent — the user is initiating)
             addMessage('user', initialPrompt);
 
             const userMessage = {
+                kind: 'message',
                 messageId: crypto.randomUUID(),
                 role: 'user',
                 parts: [{ kind: 'text', text: initialPrompt }],
-                kind: 'message',
             };
 
-            // Show loading
             const chat = document.getElementById('chat-messages');
-            const loadingDiv = document.createElement('div');
+            loadingDiv = document.createElement('div');
             loadingDiv.className = 'message agent loading';
             loadingDiv.innerHTML = `<div class="content">Consulting the Meditations...</div>`;
             chat.appendChild(loadingDiv);
@@ -571,60 +564,41 @@
 
             try {
                 const stream = client.sendMessageStream({ message: userMessage });
-                let fullResponse = '';
+                let response = '';
                 let lastFinalState = null;
 
                 for await (const event of stream) {
-                    console.log('Initial event:', event.kind);
-
                     if (event.kind === 'status-update') {
-                        // Only act on the final state once, ignoring duplicates
-                        if (event.final && event.status.message && event.status.message.messageId !== lastFinalState) {
+                        if (event.final && event.status?.message && event.status.message.messageId !== lastFinalState) {
                             lastFinalState = event.status.message.messageId;
-                            const agentText = event.status.message.parts
-                                .map((p) => p.text || '')
-                                .join('\n');
-                            if (agentText) {
-                                fullResponse = agentText;
-                            }
+                            const text = extractTextFromEvent(event);
+                            if (text) response = text;
                         }
-                    } else if (event.kind === 'message') {
-                        const msgText = event.parts
-                            .map((p) => p.text || '')
-                            .join('\n');
-                        if (msgText) {
-                            fullResponse = msgText;
-                        }
-                    } else if (event.kind === 'task' && event.status?.message) {
-                        const taskMsg = event.status.message.parts
-                            .map((p) => p.text || '')
-                            .join('\n');
-                        if (taskMsg) {
-                            fullResponse = taskMsg;
-                        }
+                    } else {
+                        const text = extractTextFromEvent(event);
+                        if (text) response = text;
                     }
 
-                    if (event.contextId) {
-                        contextId = event.contextId;
-                    }
-                    if (event.taskId) {
-                        taskId = event.taskId;
-                    }
+                    if (event.contextId) contextId = event.contextId;
+                    if (event.taskId) taskId = event.taskId;
                 }
 
                 chat.removeChild(loadingDiv);
-                if (fullResponse) {
-                    addMessage('agent', fullResponse);
+                loadingDiv = null;
+
+                if (response) {
+                    addMessage('agent', response);
                 }
 
-                // Reset taskId if the agent finished the conversation
-                const finished = fullResponse.includes('COMPLETED') && !fullResponse.includes('AWAITING_USER_INPUT');
-                if (finished) {
+                if (isConversationFinished(response)) {
                     taskId = null;
                 }
 
             } catch (error) {
-                try { chat.removeChild(loadingDiv); } catch (e) {}
+                if (loadingDiv) {
+                    try { chat.removeChild(loadingDiv); } catch (e) {}
+                    loadingDiv = null;
+                }
                 console.error('Error starting dialogue:', error);
                 addMessage('agent', 'Error connecting to Stoic Guide.');
             }
@@ -632,10 +606,13 @@
 
         // Initialize
         (async function() {
-            const connected = await connectToAgent();
-            if (connected) {
+            try {
+                const factory = new ClientFactory();
+                client = await factory.createFromUrl('http://localhost:41242');
+                console.log('Connected to Stoic Guide agent');
                 startNewDialogue();
-            } else {
+            } catch (error) {
+                console.error('Failed to connect to agent:', error);
                 addMessage('agent', 'Connecting to Stoic Guide... please wait.');
             }
         })();
@@ -645,7 +622,7 @@
             const input = document.getElementById('user-input');
             const text = input.value;
             if (text.trim()) {
-                sendMessageToAgent(text);
+                sendUserMessage(text);
                 input.value = '';
                 input.style.height = '52px';
             }
@@ -656,7 +633,7 @@
                 e.preventDefault();
                 const input = document.getElementById('user-input');
                 if (input.value.trim()) {
-                    sendMessageToAgent(input.value);
+                    sendUserMessage(input.value);
                     input.value = '';
                     input.style.height = '52px';
                 }
