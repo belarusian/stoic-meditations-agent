@@ -160,12 +160,25 @@ class StoicAgentExecutor implements AgentExecutor {
       console.log(`[RAG] Context length: ${meditationsContext.length} chars`);
       
       // Run the Genkit prompt with Meditations context
+      // Inject RAG context as a system message at the start so it's part of the
+      // conversation sequence, not a separate competing context block.
+      const systemContext = meditationsContext
+        ? `## Context from Marcus Aurelius' Meditations:\n${meditationsContext}\n---`
+        : '';
+      
+      const fullMessages: MessageData[] = systemContext
+        ? [{
+            role: 'system',
+            content: [{ text: systemContext }],
+          }, ...messages]
+        : messages;
+
       const response = await stoicAgentPrompt(
         { 
           meditations: meditationsContext || 'Meditations context not available.'
         },
         {
-          messages,
+          messages: fullMessages,
           // llama.cpp repetition / presence / frequency penalties
           // repeat_penalty: 1.0 = no effect, >1.0 discourages repetition
           // presence_penalty / frequency_penalty: penalize repeated tokens
