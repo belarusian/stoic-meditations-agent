@@ -1,7 +1,7 @@
 import * as esbuild from 'esbuild';
 import { spawnSync } from 'child_process';
 import { resolve, dirname } from 'path';
-import { writeFileSync, readFileSync, mkdirSync } from 'fs';
+import { writeFileSync, readFileSync, mkdirSync, copyFileSync } from 'fs';
 import { fileURLToPath } from 'url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -202,5 +202,12 @@ const appScript = `
 html = html.replace('<!-- PLACEHOLDER_SCRIPT -->', appScript);
 writeFileSync(resolve(distDir, 'index.html'), html);
 console.log('[build] Built dist/index.html');
+
+// 4. Copy built assets to root dist/ for serving
+const rootDistDir = resolve(resolve(__dirname, '..'), 'dist');
+mkdirSync(rootDistDir, { recursive: true });
+copyFileSync(resolve(distDir, 'index.html'), resolve(rootDistDir, 'index.html'));
+copyFileSync(resolve(distDir, 'client.js'), resolve(rootDistDir, 'client.js'));
+console.log('[build] Copied dist/ files to root dist/');
 
 console.log('[build] Done.');
