@@ -6,7 +6,9 @@
   "type": "module",
   "scripts": {
     "start": "node dist/agent.js",
-    "build": "tsc",
+    "build:server": "tsc",
+    "build:client": "cd client && node build.mjs",
+    "build": "tsc && cd client && node build.mjs",
     "dev": "ts-node src/agent.ts",
     "test": "vitest run",
     "test:watch": "vitest"
@@ -36,6 +38,7 @@
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
     "@types/node": "^25.9.1",
+    "esbuild": "^0.28.0",
     "execa": "^9.6.1",
     "got": "^15.0.5",
     "typescript": "^6.0.3",
