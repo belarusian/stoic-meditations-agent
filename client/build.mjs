@@ -63,7 +63,7 @@ const appScript = `
         }
         const content = document.createElement('div');
         content.className = 'content';
-        content.innerHTML = renderText(text);
+        content.innerHTML = marked.parse(renderText(text));
         msgDiv.appendChild(content);
         chat.appendChild(msgDiv);
         chat.scrollTop = chat.scrollHeight;

@@ -38,6 +38,9 @@ export function extractTextFromEvent(event: StreamEvent): string {
 
 /**
  * Clean and format agent text: strip control markers.
+ * NOTE: This module does NOT include markdown rendering.
+ * The browser app should import `marked` separately and call
+ * marked.parse(renderText(text)) for proper formatting.
  */
 export function renderText(text: string): string {
   return text.trim().replace(/(?:^|\n)\s*(AWAITING_USER_INPUT|COMPLETED)\s*$/gi, '');
