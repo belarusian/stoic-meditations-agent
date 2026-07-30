@@ -1,0 +1,48 @@
+Defrag analysis started: 2026-07-30T17:15:04.237526
+============================================================
+
+[17:15:04] (+0.0s) Starting semantic analysis on .
+[17:15:04] (+0.0s) Using provider: openai
+[17:15:04] (+0.0s) Using model: Qwen3.6-27B-UD-Q4_K_XL.gguf
+[17:15:04] (+0.0s) Initializing LLM client...
+[17:15:04] (+0.6s) LLM client ready
+
+============================================================
+Step 1: Documentation Analysis
+============================================================
+
+[17:15:04] (+0.6s) Scanning for documentation files...
+[17:15:04] (+0.6s) Found 5 documentation files
+[17:15:04] (+0.6s) Extracting concepts from documentation (LLM calls)...
+[17:17:02] (+118.3s) Extracted 59 doc concepts
+
+============================================================
+Step 2: Intelligent Code Discovery
+============================================================
+
+[17:17:02] (+118.3s) Using LLM to intelligently discover files...
+[17:17:25] (+141.5s) Found 10 code files
+[17:17:25] (+141.5s) Extracting concepts from code (LLM calls)...
+[17:17:25] (+141.5s) Extracted 0 code concepts
+
+============================================================
+Step 3: Concept Matching
+============================================================
+
+[17:17:25] (+141.5s) Matching 0 code concepts to 59 doc concepts...
+[17:17:25] (+141.5s) (automatic iterative refinement enabled for low-confidence matches)
+[17:17:25] (+141.5s) Found 0 matches (0 high-confidence, 0 refined)
+
+============================================================
+Step 4: Physical Link Validation
+============================================================
+
+[17:17:25] (+141.5s) Validating matches with physical link checker...
+[17:17:25] (+141.5s) Physical validation complete
+[17:17:25] (+141.5s) Saving semantic index...
+[17:17:25] (+141.5s) Index saved to ./semantic_index.json
+[17:17:25] (+141.5s) Analysis complete: 0 matches, 0 high confidence
+
+============================================================
+Analysis complete! Total time: 141.5s
+============================================================

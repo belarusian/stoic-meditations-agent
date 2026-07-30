@@ -1,0 +1,1135 @@
+{
+  "version": "1.0",
+  "metadata": {
+    "version": "1.0",
+    "file_hashes": {
+      "AGENT.md": "f4203c707ac054155f86a01b5e27cc7ef318e9f552a35021975e182ac182cfc8",
+      "AGENTS.md": "f57e4f5f299c680ccb11e378371ccda12a17ec15ee0d40a26673849af4b57f48",
+      "CODE_OF_CONDUCT.md": "4b40bf3672cff9f92b9880fcf669dcf84dfefaced5420aaca4ddaa9f52bc89bb",
+      "CONTRIBUTING.md": "66315030b66940686775b3813c8c24875fae219d8e6eee5a8e75fd1723ec8234",
+      "README.md": "79b3c6523958c778389af6a26939578e45d8adbf24f3e446fe834082f1508e8c"
+    }
+  },
+  "concepts": {
+    "doc:AGENT.md:stoic_what_if_cards_-_agent_guide": {
+      "id": "doc:AGENT.md:stoic_what_if_cards_-_agent_guide",
+      "source": "AGENT.md",
+      "source_type": "doc",
+      "location": "Stoic What If Cards - Agent Guide",
+      "description": "This section outlines the functionality of an agent that facilitates Stoic philosophy practice through 'What if?' scenarios by referencing Marcus Aurelius' Meditations.",
+      "keywords": [
+        "Stoic philosophy",
+        "What if scenarios",
+        "Marcus Aurelius",
+        "Meditations",
+        "Agent Guide"
+      ],
+      "line_range": [
+        1,
+        4
+      ],
+      "raw_content": "This agent helps you practice Stoic philosophy through \"What if?\" scenarios. It reads Marcus Aurelius' *Meditations* directly to provide rich, accurate context."
+    },
+    "doc:AGENT.md:overview": {
+      "id": "doc:AGENT.md:overview",
+      "source": "AGENT.md",
+      "source_type": "doc",
+      "location": "Overview",
+      "description": "This section outlines the functionality and design philosophy of an A2A-compliant Stoic agent that facilitates present-moment reflection without storing user data.",
+      "keywords": [
+        "A2A-compliant",
+        "Stoic agent",
+        "meditations.mb.txt",
+        "present-moment reflection",
+        "privacy",
+        "non-persistent"
+      ],
+      "line_range": [
+        5,
+        12
+      ],
+      "raw_content": "This is an A2A-compliant agent that:\n- Reads `meditations.mb.txt` for authentic Stoic context\n- Engages in conversation about Stoic scenarios\n- Helps you reflect on present-moment responses\n- Does NOT save reflections ( Stoicism is about presence, not hoarding insights)"
+    },
+    "doc:AGENT.md:setup": {
+      "id": "doc:AGENT.md:setup",
+      "source": "AGENT.md",
+      "source_type": "doc",
+      "location": "Setup",
+      "description": "This section outlines the three-step process for configuring, launching, and interacting with a Stoic agent using Google API credentials and npm commands.",
+      "keywords": [
+        "Google API key",
+        "Stoic agent",
+        "CLI chat",
+        "npm run",
+        "environment variable"
+      ],
+      "line_range": [
+        13,
+        29
+      ],
+      "raw_content": "1. **Set your Google API key:**\n   ```bash\n   export GOOGLE_API_KEY=your_api_key_here\n   ```\n\n2. **Start the agent:**\n   ```bash\n   npm run agents:stoic\n   ```\n\n3. **Use the CLI to chat:**\n   ```bash\n   npm run a2a:cli http://localhost:41242\n   ```"
+    },
+    "doc:AGENT.md:reading_meditations": {
+      "id": "doc:AGENT.md:reading_meditations",
+      "source": "AGENT.md",
+      "source_type": "doc",
+      "location": "Reading Meditations",
+      "description": "This section explains that the agent loads the complete text of Meditations during startup to incorporate it into its prompts.",
+      "keywords": [
+        "startup",
+        "Meditations",
+        "text loading",
+        "prompts"
+      ],
+      "line_range": [
+        32,
+        38
+      ],
+      "raw_content": "The agent reads the full *Meditations* text on startup and includes it in prompts:\n\n```typescript\nconst meditationsText = readFileSync(meditationsPath, \"utf-8\");\n```"
+    },
+    "doc:AGENT.md:the_prompt": {
+      "id": "doc:AGENT.md:the_prompt",
+      "source": "AGENT.md",
+      "source_type": "doc",
+      "location": "The Prompt",
+      "description": "This section outlines the four specific components of the Genkit prompt used by the agent to facilitate Stoic reflection based on Meditations.",
+      "keywords": [
+        "Genkit prompt",
+        "Meditations",
+        "Stoic reflection",
+        "present moment",
+        "context"
+      ],
+      "line_range": [
+        39,
+        45
+      ],
+      "raw_content": "The agent uses a Genkit prompt that:\n1. Includes the full Meditations text as context\n2. Presents the \"What if?\" scenario\n3. Asks for Stoic reflection and guidance\n4. Reminds the user to focus on the present moment"
+    },
+    "doc:AGENT.md:conversation_flow": {
+      "id": "doc:AGENT.md:conversation_flow",
+      "source": "AGENT.md",
+      "source_type": "doc",
+      "location": "Conversation Flow",
+      "description": "This section outlines a four-step ephemeral dialogue process where an agent guides a user through Stoic reflection based on Meditations without saving the interaction.",
+      "keywords": [
+        "conversation flow",
+        "Stoic perspective",
+        "Meditations",
+        "ephemeral",
+        "dialogue"
+      ],
+      "line_range": [
+        46,
+        51
+      ],
+      "raw_content": "1. User draws a card \u2192 Agent presents the scenario with source\n2. User reflects \u2192 Agent engages in dialogue about the Stoic perspective\n3. User responds \u2192 Agent provides guidance based on Meditations\n4. No saving \u2192 The reflection is for the moment, then released"
+    },
+    "doc:AGENT.md:`stoic_reflection`": {
+      "id": "doc:AGENT.md:`stoic_reflection`",
+      "source": "AGENT.md",
+      "source_type": "doc",
+      "location": "`stoic_reflection`",
+      "description": "This section defines the protocol for answering inquiries regarding Stoic philosophy by strictly utilizing Marcus Aurelius' Meditations as the primary reference.",
+      "keywords": [
+        "Stoic philosophy",
+        "Marcus Aurelius",
+        "Meditations",
+        "authoritative source"
+      ],
+      "line_range": [
+        54,
+        61
+      ],
+      "raw_content": "Answers questions about Stoic philosophy using Marcus Aurelius' *Meditations* as the authoritative source.\n\n**Examples:**\n- \"What would Marcus say about dealing with anger?\"\n- \"How should I respond if someone insults me?\"\n- \"What does Stoicism say about loss and grief?\""
+    },
+    "doc:AGENT.md:running_as_an_agent": {
+      "id": "doc:AGENT.md:running_as_an_agent",
+      "source": "AGENT.md",
+      "source_type": "doc",
+      "location": "Running as an Agent",
+      "description": "This section provides instructions for starting the application as an A2A agent using a specific npm command, which launches the service on localhost port 41242.",
+      "keywords": [
+        "A2A agent",
+        "npm run agents:stoic",
+        "localhost",
+        "port 41242"
+      ],
+      "line_range": [
+        62,
+        71
+      ],
+      "raw_content": "To run this as an A2A agent:\n\n```bash\nnpm run agents:stoic\n```\n\nThe agent will start on `http://localhost:41242`."
+    },
+    "doc:AGENT.md:testing_with_cli": {
+      "id": "doc:AGENT.md:testing_with_cli",
+      "source": "AGENT.md",
+      "source_type": "doc",
+      "location": "Testing with CLI",
+      "description": "This section explains how to interact with the application using a command-line interface by running a specific npm script and managing conversation sessions.",
+      "keywords": [
+        "CLI",
+        "testing",
+        "npm",
+        "terminal",
+        "session"
+      ],
+      "line_range": [
+        72,
+        81
+      ],
+      "raw_content": "In a separate terminal:\n\n```bash\nnpm run a2a:cli http://localhost:41242\n```\n\nThen type your questions or use `/new` to start a fresh session."
+    },
+    "doc:AGENT.md:design_principles": {
+      "id": "doc:AGENT.md:design_principles",
+      "source": "AGENT.md",
+      "source_type": "doc",
+      "location": "Design Principles",
+      "description": "This section outlines the core design principles emphasizing simplicity, ephemeral presence, authentic sourcing, conversational tone, and practical application.",
+      "keywords": [
+        "Simplicity",
+        "Presence",
+        "Authenticity",
+        "Dialogue",
+        "Action"
+      ],
+      "line_range": [
+        82,
+        89
+      ],
+      "raw_content": "- **Simplicity** - No colors, clean typography, minimal distractions\n- **Presence** - Reflections are for the moment, not saved\n- **Authenticity** - Sources directly from Meditations, not interpretations\n- **Dialogue** - Conversation, not lectures\n- **Action** - Focus on practical application, not theory"
+    },
+    "doc:AGENT.md:the_stoic_model_persona": {
+      "id": "doc:AGENT.md:the_stoic_model_persona",
+      "source": "AGENT.md",
+      "source_type": "doc",
+      "location": "The Stoic Model Persona",
+      "description": "This section defines the behavioral guidelines and philosophical framework for a Stoic persona, emphasizing calmness, direct textual references, and virtue-aligned guidance.",
+      "keywords": [
+        "Stoic",
+        "persona",
+        "Meditations",
+        "virtue",
+        "self-reflection",
+        "calm",
+        "thoughtful"
+      ],
+      "line_range": [
+        90,
+        99
+      ],
+      "raw_content": "When engaging:\n- Be calm, measured, thoughtful\n- Reference Meditations directly with book/section\n- Ask questions to guide self-reflection\n- Help users see situations through a Stoic lens\n- Encourage action aligned with virtue\n- Remember: \"The happiness of your life depends upon the quality of your thoughts\""
+    },
+    "doc:AGENT.md:files": {
+      "id": "doc:AGENT.md:files",
+      "source": "AGENT.md",
+      "source_type": "doc",
+      "location": "Files",
+      "description": "This section outlines the project's file structure, detailing the specific roles of source files for configuration, agent logic, and CLI testing, as well as the web interface and documentation.",
+      "keywords": [
+        "file structure",
+        "src/genkit.ts",
+        "src/agent.ts",
+        "src/cli.ts",
+        "index.html",
+        "AGENTS.md"
+      ],
+      "line_range": [
+        100,
+        107
+      ],
+      "raw_content": "- `src/genkit.ts` - Genkit configuration and Meditations loading\n- `src/agent.ts` - A2A agent implementation\n- `src/cli.ts` - Command-line client for testing\n- `index.html` - Web interface (minimalist design)\n- `AGENTS.md` - This file"
+    },
+    "doc:AGENT.md:environment_variables": {
+      "id": "doc:AGENT.md:environment_variables",
+      "source": "AGENT.md",
+      "source_type": "doc",
+      "location": "Environment Variables",
+      "description": "This section defines the environment variables required for API access and server configuration.",
+      "keywords": [
+        "GOOGLE_API_KEY",
+        "STOIC_AGENT_PORT",
+        "environment variables"
+      ],
+      "line_range": [
+        108,
+        111
+      ],
+      "raw_content": "- `GOOGLE_API_KEY` - Required for Genkit/Gemini API access\n- `STOIC_AGENT_PORT` - Port to run on (default: 41242)"
+    },
+    "doc:AGENTS.md:stoic_what_if_cards_-_agent_knowledge_base": {
+      "id": "doc:AGENTS.md:stoic_what_if_cards_-_agent_knowledge_base",
+      "source": "AGENTS.md",
+      "source_type": "doc",
+      "location": "Stoic What If Cards - Agent Knowledge Base",
+      "description": "This document provides essential context for AI agents working in the stoic-what-if-cards repository.",
+      "keywords": [
+        "Stoic What If Cards",
+        "Agent Knowledge Base",
+        "AI agents",
+        "stoic-what-if-cards repository"
+      ],
+      "line_range": [
+        1,
+        4
+      ],
+      "raw_content": "This document provides essential context for AI agents working in the `stoic-what-if-cards` repository."
+    },
+    "doc:AGENTS.md:overview": {
+      "id": "doc:AGENTS.md:overview",
+      "source": "AGENTS.md",
+      "source_type": "doc",
+      "location": "Overview",
+      "description": "This section introduces stoic-what-if-cards as a web-based tool that facilitates Stoic philosophical engagement through scenario cards sourced from meditations.mb.txt.",
+      "keywords": [
+        "stoic-what-if-cards",
+        "web-based",
+        "Stoic philosophy",
+        "scenario cards",
+        "meditations.mb.txt"
+      ],
+      "line_range": [
+        5,
+        8
+      ],
+      "raw_content": "`stoic-what-if-cards` is a web-based Stoic practice tool that helps users engage with Stoic philosophy through \"What if?\" scenario cards. The tool reads directly from `meditations.mb.txt` to provide rich context and engage in genuine philosophical dialogue."
+    },
+    "doc:AGENTS.md:core_files": {
+      "id": "doc:AGENTS.md:core_files",
+      "source": "AGENTS.md",
+      "source_type": "doc",
+      "location": "Core Files",
+      "description": "This section outlines the essential files comprising the project, including the minimalist web interface, the source text for Marcus Aurelius' Meditations, and the agent configuration file.",
+      "keywords": [
+        "index.html",
+        "meditations.mb.txt",
+        "AGENTS.md",
+        "Stoic design",
+        "Marcus Aurelius"
+      ],
+      "line_range": [
+        11,
+        15
+      ],
+      "raw_content": "- **`index.html`** - Single-page web application with minimalist, Stoic design (no colors, clean typography)\n- **`meditations.mb.txt`** - Marcus Aurelius' Meditations (source text for context)\n- **`AGENTS.md`** - This file"
+    },
+    "doc:AGENTS.md:design_principles": {
+      "id": "doc:AGENTS.md:design_principles",
+      "source": "AGENTS.md",
+      "source_type": "doc",
+      "location": "Design Principles",
+      "description": "This section outlines the core design philosophy, emphasizing a minimalist and stoic aesthetic that prioritizes content clarity and present-moment reflection over visual distraction.",
+      "keywords": [
+        "Minimalist UI",
+        "Stoic aesthetic",
+        "Present-moment focus",
+        "Clean",
+        "Simple",
+        "Content-focused"
+      ],
+      "line_range": [
+        16,
+        20
+      ],
+      "raw_content": "- **Minimalist UI** - No distracting colors, gradients, or animations\n- **Stoic aesthetic** - Clean, simple, focused on content\n- **Present-moment focus** - Reflections are for the moment, then released"
+    },
+    "doc:AGENTS.md:1._card_system": {
+      "id": "doc:AGENTS.md:1._card_system",
+      "source": "AGENTS.md",
+      "source_type": "doc",
+      "location": "1. Card System",
+      "description": "This section outlines a card system featuring over fifty Stoic-based scenarios derived from Marcus Aurelius' Meditations, which can be accessed either randomly or sequentially.",
+      "keywords": [
+        "Card System",
+        "Stoic principles",
+        "Marcus Aurelius",
+        "Meditations",
+        "scenarios"
+      ],
+      "line_range": [
+        23,
+        27
+      ],
+      "raw_content": "- 50+ \"What if?\" scenario cards based on Stoic principles\n- Each card presents a scenario from Marcus Aurelius' Meditations\n- Cards are drawn randomly or sequentially"
+    },
+    "doc:AGENTS.md:2._llm_integration": {
+      "id": "doc:AGENTS.md:2._llm_integration",
+      "source": "AGENTS.md",
+      "source_type": "doc",
+      "location": "2. LLM Integration",
+      "description": "This section outlines the workflow for integrating a Large Language Model to provide Stoic philosophical guidance based on user interactions with meditation cards.",
+      "keywords": [
+        "LLM Integration",
+        "Stoic philosophy",
+        "meditations.mb.txt",
+        "dialogue",
+        "reflection",
+        "guidance"
+      ],
+      "line_range": [
+        28,
+        36
+      ],
+      "raw_content": "The model:\n1. Reads `meditations.mb.txt` to understand Stoic philosophy\n2. When a user draws a card, the model:\n   - Identifies the relevant Stoic principle\n   - Engages in dialogue about the scenario\n   - Helps the user reflect on their response\n   - Offers Stoic guidance"
+    },
+    "doc:AGENTS.md:3._reflection_process": {
+      "id": "doc:AGENTS.md:3._reflection_process",
+      "source": "AGENTS.md",
+      "source_type": "doc",
+      "location": "3. Reflection Process",
+      "description": "This section outlines the ephemeral reflection process where users explore 'What if?' scenarios through a Stoic lens without saving their insights to emphasize presence.",
+      "keywords": [
+        "reflection",
+        "Stoic lens",
+        "presence",
+        "ephemeral",
+        "insights"
+      ],
+      "line_range": [
+        37,
+        42
+      ],
+      "raw_content": "- User reads the card's \"What if?\" question\n- Model helps explore the scenario through a Stoic lens\n- User reflects in the moment\n- Reflection is not saved (Stoic practice is about presence, not hoarding insights)"
+    },
+    "doc:AGENTS.md:system_context": {
+      "id": "doc:AGENTS.md:system_context",
+      "source": "AGENTS.md",
+      "source_type": "doc",
+      "location": "System Context",
+      "description": "This section defines the system's persona as an expert on Marcus Aurelius' Meditations, specifying requirements for accurate textual referencing, correct Stoic terminology, and a compassionate, non-prescriptive tone focused on guiding self-examination.",
+      "keywords": [
+        "Marcus Aurelius",
+        "Meditations",
+        "Stoicism",
+        "persona",
+        "tone",
+        "self-examination"
+      ],
+      "line_range": [
+        45,
+        51
+      ],
+      "raw_content": "The model operates with full knowledge of Marcus Aurelius' Meditations. It should:\n- Reference specific books/sections when relevant\n- Use Stoic terminology correctly (daemon, Logos, etc.)\n- Maintain Marcus' tone: thoughtful, disciplined, compassionate\n- Guide users toward self-examination, not give prescriptive answers"
+    },
+    "doc:AGENTS.md:card_flow": {
+      "id": "doc:AGENTS.md:card_flow",
+      "source": "AGENTS.md",
+      "source_type": "doc",
+      "location": "Card Flow",
+      "description": "This section outlines a four-step interactive workflow where users engage with Stoic concepts through card drawing, reflection, dialogue, and immediate application.",
+      "keywords": [
+        "Card Flow",
+        "Stoic implications",
+        "interactive workflow",
+        "reflection",
+        "application"
+      ],
+      "line_range": [
+        52,
+        57
+      ],
+      "raw_content": "1. User draws card \u2192 Model presents scenario with source reference\n2. User reflects \u2192 Model asks questions, offers perspectives\n3. Dialogue ensues \u2192 Model helps unpack the Stoic implications\n4. User acts \u2192 Model encourages application in the moment"
+    },
+    "doc:AGENTS.md:gotchas_&_important_patterns": {
+      "id": "doc:AGENTS.md:gotchas_&_important_patterns",
+      "source": "AGENTS.md",
+      "source_type": "doc",
+      "location": "Gotchas & Important Patterns",
+      "description": "This section outlines critical design and philosophical constraints for a Stoic application, emphasizing present-moment awareness, factual accuracy, Socratic guidance, actionable utility, and minimalist aesthetics.",
+      "keywords": [
+        "Stoicism",
+        "present awareness",
+        "accuracy",
+        "Socratic method",
+        "action-oriented",
+        "minimalist design"
+      ],
+      "line_range": [
+        58,
+        65
+      ],
+      "raw_content": "- **No saving reflections** - Stoicism is about present awareness, not hoarding insights\n- **Stoic accuracy matters** - Double-check Marcus quotes and concepts\n- **Be Socratic, not dogmatic** - Guide users to their own insights\n- **Focus on action** - Help users apply Stoicism, not just understand it\n- **Minimalist design** - No colors, no animations, no distractions"
+    },
+    "doc:AGENTS.md:testing_the_integration": {
+      "id": "doc:AGENTS.md:testing_the_integration",
+      "source": "AGENTS.md",
+      "source_type": "doc",
+      "location": "Testing the Integration",
+      "description": "This section outlines the step-by-step process for testing the integration by opening the application, drawing a card, discussing it with the model, and reflecting on the interaction.",
+      "keywords": [
+        "testing",
+        "integration",
+        "index.html",
+        "draw card",
+        "model discussion",
+        "reflection"
+      ],
+      "line_range": [
+        66,
+        72
+      ],
+      "raw_content": "1. Open `index.html` in a browser\n2. Draw a card\n3. Discuss the scenario with the model\n4. Reflect in the moment (no saving required)"
+    },
+    "doc:AGENTS.md:the_stoic_model_persona": {
+      "id": "doc:AGENTS.md:the_stoic_model_persona",
+      "source": "AGENTS.md",
+      "source_type": "doc",
+      "location": "The Stoic Model Persona",
+      "description": "This section defines the behavioral guidelines for a Stoic persona, instructing the model to interact with calmness, reference Marcus Aurelius's Meditations, and guide users toward virtuous action through self-reflection.",
+      "keywords": [
+        "Stoic",
+        "persona",
+        "Meditations",
+        "self-reflection",
+        "virtue",
+        "calm",
+        "thoughtful"
+      ],
+      "line_range": [
+        73,
+        81
+      ],
+      "raw_content": "When engaging with users, the model should:\n- Be calm, thoughtful, and measured\n- Reference Meditations appropriately\n- Ask probing questions to guide self-reflection\n- Help users see situations through a Stoic lens\n- Encourage action aligned with virtue\n- Remember: \"The happiness of your life depends upon the quality of your thoughts\""
+    },
+    "doc:CODE_OF_CONDUCT.md:our_pledge": {
+      "id": "doc:CODE_OF_CONDUCT.md:our_pledge",
+      "source": "CODE_OF_CONDUCT.md",
+      "source_type": "doc",
+      "location": "Our Pledge",
+      "description": "This section outlines a commitment by community members to ensure a harassment-free, inclusive, and welcoming environment for all participants regardless of their personal characteristics.",
+      "keywords": [
+        "pledge",
+        "harassment-free",
+        "inclusivity",
+        "diversity",
+        "community standards"
+      ],
+      "line_range": [
+        3,
+        14
+      ],
+      "raw_content": "We as members, contributors, and leaders pledge to make participation in our\ncommunity a harassment-free experience for everyone, regardless of age, body\nsize, visible or invisible disability, ethnicity, sex characteristics, gender\nidentity and expression, level of experience, education, socio-economic status,\nnationality, personal appearance, race, religion, or sexual identity\nand orientation.\n\nWe pledge to act and interact in ways that contribute to an open, welcoming,\ndiverse, inclusive, and "
+    },
+    "doc:CODE_OF_CONDUCT.md:our_standards": {
+      "id": "doc:CODE_OF_CONDUCT.md:our_standards",
+      "source": "CODE_OF_CONDUCT.md",
+      "source_type": "doc",
+      "location": "Our Standards",
+      "description": "This section outlines the expected positive behaviors and prohibited actions to maintain a respectful and professional community environment.",
+      "keywords": [
+        "community standards",
+        "acceptable behavior",
+        "unacceptable behavior",
+        "code of conduct",
+        "harassment"
+      ],
+      "line_range": [
+        15,
+        38
+      ],
+      "raw_content": "Examples of behavior that contributes to a positive environment for our\ncommunity include:\n\n* Demonstrating empathy and kindness toward other people\n* Being respectful of differing opinions, viewpoints, and experiences\n* Giving and gracefully accepting constructive feedback\n* Accepting responsibility and apologizing to those affected by our mistakes,\n  and learning from the experience\n* Focusing on what is best not just for us as individuals, but for the\n  overall community\n\nExamples of unaccept"
+    },
+    "doc:CODE_OF_CONDUCT.md:enforcement_responsibilities": {
+      "id": "doc:CODE_OF_CONDUCT.md:enforcement_responsibilities",
+      "source": "CODE_OF_CONDUCT.md",
+      "source_type": "doc",
+      "location": "Enforcement Responsibilities",
+      "description": "This section defines the authority and duties of community leaders to clarify behavioral standards and enforce them through fair corrective actions against inappropriate conduct.",
+      "keywords": [
+        "community leaders",
+        "enforcement",
+        "standards",
+        "corrective action",
+        "behavior"
+      ],
+      "line_range": [
+        39,
+        45
+      ],
+      "raw_content": "Community leaders are responsible for clarifying and enforcing our standards of\nacceptable behavior and will take appropriate and fair corrective action in\nresponse to any behavior that they deem inappropriate, threatening, offensive,\nor harmful."
+    },
+    "doc:CODE_OF_CONDUCT.md:scope": {
+      "id": "doc:CODE_OF_CONDUCT.md:scope",
+      "source": "CODE_OF_CONDUCT.md",
+      "source_type": "doc",
+      "location": "Scope",
+      "description": "This section defines the applicability of the Code of Conduct to both internal community spaces and public interactions where individuals officially represent the community.",
+      "keywords": [
+        "scope",
+        "community spaces",
+        "public representation",
+        "applicability"
+      ],
+      "line_range": [
+        46,
+        50
+      ],
+      "raw_content": "This Code of Conduct applies within all community spaces, and also applies when\nan individual is officially representing the community in public spaces."
+    },
+    "doc:CODE_OF_CONDUCT.md:enforcement": {
+      "id": "doc:CODE_OF_CONDUCT.md:enforcement",
+      "source": "CODE_OF_CONDUCT.md",
+      "source_type": "doc",
+      "location": "Enforcement",
+      "description": "This section outlines the procedure for reporting unacceptable behavior to community leaders and guarantees a prompt, fair investigation of all complaints.",
+      "keywords": [
+        "enforcement",
+        "reporting",
+        "abusive behavior",
+        "investigation",
+        "community leaders"
+      ],
+      "line_range": [
+        51,
+        56
+      ],
+      "raw_content": "Instances of abusive, harassing, or otherwise unacceptable behavior may be\nreported to the community leaders responsible for enforcement at\nsasha@compsci.boutique. All complaints will be reviewed and investigated promptly and fairly."
+    },
+    "doc:CODE_OF_CONDUCT.md:attribution": {
+      "id": "doc:CODE_OF_CONDUCT.md:attribution",
+      "source": "CODE_OF_CONDUCT.md",
+      "source_type": "doc",
+      "location": "Attribution",
+      "description": "This section attributes the Code of Conduct to version 2.1 of the Contributor Covenant and provides links to its source.",
+      "keywords": [
+        "attribution",
+        "Contributor Covenant",
+        "version 2.1",
+        "source"
+      ],
+      "line_range": [
+        57,
+        63
+      ],
+      "raw_content": "This Code of Conduct is adapted from the [Contributor Covenant][homepage],\nversion 2.1, available at\nhttps://www.contributor-covenant.org/version/2/1/code_of_conduct.html\n\n[homepage]: https://www.contributor-covenant.org"
+    },
+    "doc:CONTRIBUTING.md:contributing_to_stoic_what_if_cards": {
+      "id": "doc:CONTRIBUTING.md:contributing_to_stoic_what_if_cards",
+      "source": "CONTRIBUTING.md",
+      "source_type": "doc",
+      "location": "Contributing to Stoic What If Cards",
+      "description": "This section serves as a welcoming introduction for individuals interested in contributing to the Stoic What If Cards project.",
+      "keywords": [
+        "contributing",
+        "Stoic What If Cards",
+        "interest"
+      ],
+      "line_range": [
+        1,
+        4
+      ],
+      "raw_content": "Thank you for your interest in contributing to Stoic What If Cards!"
+    },
+    "doc:CONTRIBUTING.md:how_to_contribute": {
+      "id": "doc:CONTRIBUTING.md:how_to_contribute",
+      "source": "CONTRIBUTING.md",
+      "source_type": "doc",
+      "location": "How to Contribute",
+      "description": "This section outlines the standard workflow for contributing code to a project, including forking, coding, testing, and submitting pull requests.",
+      "keywords": [
+        "contribute",
+        "fork",
+        "pull request",
+        "coding standards",
+        "testing"
+      ],
+      "line_range": [
+        5,
+        11
+      ],
+      "raw_content": "1. **Fork the repository** and create your branch from `main`\n2. **Make your changes** following the project's coding standards\n3. **Test your changes** locally before submitting\n4. **Submit a pull request** with a clear description of your changes"
+    },
+    "doc:CONTRIBUTING.md:development_setup": {
+      "id": "doc:CONTRIBUTING.md:development_setup",
+      "source": "CONTRIBUTING.md",
+      "source_type": "doc",
+      "location": "Development Setup",
+      "description": "This section provides instructions for configuring the local environment to begin software development.",
+      "keywords": [
+        "development",
+        "setup",
+        "environment",
+        "configuration"
+      ],
+      "line_range": [
+        12,
+        14
+      ],
+      "raw_content": "```bash"
+    },
+    "doc:CONTRIBUTING.md:clone_your_fork": {
+      "id": "doc:CONTRIBUTING.md:clone_your_fork",
+      "source": "CONTRIBUTING.md",
+      "source_type": "doc",
+      "location": "Clone your fork",
+      "description": "This section explains how to download a local copy of your forked repository from GitHub and navigate into the project directory.",
+      "keywords": [
+        "git clone",
+        "fork",
+        "repository",
+        "local copy",
+        "directory"
+      ],
+      "line_range": [
+        15,
+        18
+      ],
+      "raw_content": "git clone https://github.com/YOUR_USERNAME/stoic-what-if-cards.git\ncd stoic-what-if-cards"
+    },
+    "doc:CONTRIBUTING.md:install_dependencies": {
+      "id": "doc:CONTRIBUTING.md:install_dependencies",
+      "source": "CONTRIBUTING.md",
+      "source_type": "doc",
+      "location": "Install dependencies",
+      "description": "This section instructs the user to run the npm install command to download and set up the project's required dependencies.",
+      "keywords": [
+        "npm",
+        "install",
+        "dependencies"
+      ],
+      "line_range": [
+        19,
+        21
+      ],
+      "raw_content": "npm install"
+    },
+    "doc:CONTRIBUTING.md:run_tests": {
+      "id": "doc:CONTRIBUTING.md:run_tests",
+      "source": "CONTRIBUTING.md",
+      "source_type": "doc",
+      "location": "Run tests",
+      "description": "This section provides the command to execute the project's test suite using npm.",
+      "keywords": [
+        "npm",
+        "test",
+        "testing"
+      ],
+      "line_range": [
+        22,
+        24
+      ],
+      "raw_content": "npm test"
+    },
+    "doc:CONTRIBUTING.md:build_the_project": {
+      "id": "doc:CONTRIBUTING.md:build_the_project",
+      "source": "CONTRIBUTING.md",
+      "source_type": "doc",
+      "location": "Build the project",
+      "description": "This section explains how to compile the project using the npm build script.",
+      "keywords": [
+        "build",
+        "npm",
+        "compile"
+      ],
+      "line_range": [
+        25,
+        27
+      ],
+      "raw_content": "npm run build"
+    },
+    "doc:CONTRIBUTING.md:start_the_server": {
+      "id": "doc:CONTRIBUTING.md:start_the_server",
+      "source": "CONTRIBUTING.md",
+      "source_type": "doc",
+      "location": "Start the server",
+      "description": "This section provides the command to initiate the server using npm.",
+      "keywords": [
+        "npm",
+        "start",
+        "server"
+      ],
+      "line_range": [
+        28,
+        31
+      ],
+      "raw_content": "npm start\n```"
+    },
+    "doc:CONTRIBUTING.md:code_style": {
+      "id": "doc:CONTRIBUTING.md:code_style",
+      "source": "CONTRIBUTING.md",
+      "source_type": "doc",
+      "location": "Code Style",
+      "description": "This section outlines the mandatory technical standards for code consistency, including the use of TypeScript across all environments and adherence to existing conventions and testing protocols.",
+      "keywords": [
+        "TypeScript",
+        "code style",
+        "conventions",
+        "testing",
+        "pull request"
+      ],
+      "line_range": [
+        32,
+        37
+      ],
+      "raw_content": "- TypeScript is used for both client and server code\n- Follow existing code patterns and conventions\n- Ensure all tests pass before submitting a PR"
+    },
+    "doc:CONTRIBUTING.md:reporting_issues": {
+      "id": "doc:CONTRIBUTING.md:reporting_issues",
+      "source": "CONTRIBUTING.md",
+      "source_type": "doc",
+      "location": "Reporting Issues",
+      "description": "This section outlines the required information and process for submitting bug reports or feature requests via GitHub issues.",
+      "keywords": [
+        "reporting",
+        "issues",
+        "GitHub",
+        "bugs",
+        "feature requests"
+      ],
+      "line_range": [
+        38,
+        44
+      ],
+      "raw_content": "If you find a bug or have a feature request, please open an issue on GitHub with:\n- A clear description of the problem or feature\n- Steps to reproduce (for bugs)\n- Expected vs actual behavior"
+    },
+    "doc:CONTRIBUTING.md:pull_request_process": {
+      "id": "doc:CONTRIBUTING.md:pull_request_process",
+      "source": "CONTRIBUTING.md",
+      "source_type": "doc",
+      "location": "Pull Request Process",
+      "description": "This section outlines the mandatory requirements and workflow steps for submitting a pull request, including documentation standards, issue linking, test validation, and maintainer review.",
+      "keywords": [
+        "pull request",
+        "title",
+        "description",
+        "issues",
+        "tests",
+        "review",
+        "maintainers"
+      ],
+      "line_range": [
+        45,
+        50
+      ],
+      "raw_content": "1. Ensure your PR has a clear title and description\n2. Reference any related issues\n3. All tests must pass\n4. Changes will be reviewed by the maintainers"
+    },
+    "doc:README.md:stoic_meditations_agent": {
+      "id": "doc:README.md:stoic_meditations_agent",
+      "source": "README.md",
+      "source_type": "doc",
+      "location": "Stoic Meditations Agent",
+      "description": "This section introduces the Stoic Meditations Agent, an A2A protocol-based AI tool that leverages RAG with ChromaDB and OpenAI-compatible LLMs to facilitate Stoic philosophy dialogues based on Marcus Aurelius' Meditations.",
+      "keywords": [
+        "Stoic Meditations Agent",
+        "A2A protocol",
+        "RAG",
+        "ChromaDB",
+        "Genkit",
+        "OpenAI-compatible LLMs",
+        "Marcus Aurelius",
+        "TypeScript"
+      ],
+      "line_range": [
+        1,
+        7
+      ],
+      "raw_content": "[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)\n[![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-3178C6.svg)](https://www.typescriptlang.org/)\n\nAn A2A protocol-based AI agent that uses Marcus Aurelius' *Meditations* with RAG (ChromaDB) to provide Stoic philosophy dialogue via Genkit and OpenAI-compatible LLMs."
+    },
+    "doc:README.md:features": {
+      "id": "doc:README.md:features",
+      "source": "README.md",
+      "source_type": "doc",
+      "location": "Features",
+      "description": "This section outlines the core technical and functional capabilities of the application, highlighting its integration of Stoic philosophy with AI-driven conversational agents, vector search, and a minimalist user interface.",
+      "keywords": [
+        "Stoic Philosophy",
+        "AI Agent Server",
+        "RAG Integration",
+        "Genkit Framework",
+        "Minimalist UI",
+        "Streaming Responses",
+        "Conversation History"
+      ],
+      "line_range": [
+        8,
+        19
+      ],
+      "raw_content": "- \ud83e\udde0 **Stoic Philosophy Integration**: Pulls insights from Marcus Aurelius' *Meditations*\n- \ud83e\udd16 **AI Agent Server**: A2A protocol-based agent server for conversational reflection\n- \ud83d\udd0d **RAG Integration**: ChromaDB vector store for semantic search over Meditations text\n- \ud83e\udde9 **Genkit Framework**: Uses Genkit with OpenAI-compatible LLMs (llama.cpp, vLLM, Ollama)\n- \ud83c\udfa8 **Minimalist UI**: Clean, distraction-free design with dark mode support\n- \ud83d\udcdd **Markdown Rendering**: Supports bold, italic, lists, and bloc"
+    },
+    "doc:README.md:architecture": {
+      "id": "doc:README.md:architecture",
+      "source": "README.md",
+      "source_type": "doc",
+      "location": "Architecture",
+      "description": "This section outlines the project's directory structure, distinguishing between frontend client files, backend server components including AI agents and vector databases, and built output artifacts.",
+      "keywords": [
+        "directory structure",
+        "frontend",
+        "backend",
+        "A2A agent",
+        "Genkit",
+        "RAG",
+        "ChromaDB",
+        "build output"
+      ],
+      "line_range": [
+        20,
+        27
+      ],
+      "raw_content": "```\nclient/          \u2190 Frontend (HTML + testable client module)\nsrc/             \u2190 Backend (A2A agent server, Genkit, RAG, ChromaDB)\ndist/            \u2190 Built output (gitignored)\n```"
+    },
+    "doc:README.md:setup": {
+      "id": "doc:README.md:setup",
+      "source": "README.md",
+      "source_type": "doc",
+      "location": "Setup",
+      "description": "This section explains how to install project dependencies using npm.",
+      "keywords": [
+        "npm",
+        "install",
+        "dependencies",
+        "setup"
+      ],
+      "line_range": [
+        28,
+        33
+      ],
+      "raw_content": "```bash\nnpm install\n```"
+    },
+    "doc:README.md:server_(a2a_+_llm_proxy)": {
+      "id": "doc:README.md:server_(a2a_+_llm_proxy)",
+      "source": "README.md",
+      "source_type": "doc",
+      "location": "Server (A2A + LLM proxy)",
+      "description": "This section provides the commands to compile the TypeScript server code and start the A2A and LLM proxy agent on localhost port 41242.",
+      "keywords": [
+        "server",
+        "build",
+        "start",
+        "TypeScript",
+        "npm",
+        "proxy",
+        "agent"
+      ],
+      "line_range": [
+        36,
+        42
+      ],
+      "raw_content": "```bash\nnpm run build:server    # Compile TypeScript \u2192 dist/\nnpm start               # Start agent server on localhost:41242\n```"
+    },
+    "doc:README.md:client_(web_ui)": {
+      "id": "doc:README.md:client_(web_ui)",
+      "source": "README.md",
+      "source_type": "doc",
+      "location": "Client (web UI)",
+      "description": "This section outlines the commands to build the client-side web interface and serve the resulting assets locally.",
+      "keywords": [
+        "client",
+        "web UI",
+        "npm",
+        "build",
+        "serve",
+        "dist"
+      ],
+      "line_range": [
+        43,
+        49
+      ],
+      "raw_content": "```bash\nnpm run build:client    # Run tests + bundle \u2192 dist/index.html + dist/client.js\nnpx serve dist -l 3000  # Serve built assets from dist/ on localhost:3000\n```"
+    },
+    "doc:README.md:both_together": {
+      "id": "doc:README.md:both_together",
+      "source": "README.md",
+      "source_type": "doc",
+      "location": "Both together",
+      "description": "This section outlines the commands required to compile, start, and serve a full-stack application locally.",
+      "keywords": [
+        "npm",
+        "build",
+        "start",
+        "serve",
+        "localhost"
+      ],
+      "line_range": [
+        50,
+        57
+      ],
+      "raw_content": "```bash\nnpm run build           # Compiles server + runs client build (tests + bundle)\nnpm start &             # Start server in background\nnpx serve . -l 3000     # Open browser at localhost:3000\n```"
+    },
+    "doc:README.md:configuration": {
+      "id": "doc:README.md:configuration",
+      "source": "README.md",
+      "source_type": "doc",
+      "location": "Configuration",
+      "description": "This section details the required environment variables and their default values for configuring the LLM endpoint, API key, and server port before starting the application.",
+      "keywords": [
+        "environment variables",
+        "LLM_BASE_URL",
+        "LLM_API_KEY",
+        "STOIC_AGENT_PORT",
+        "configuration"
+      ],
+      "line_range": [
+        58,
+        71
+      ],
+      "raw_content": "Set environment variables before running the server:\n\n| Variable | Default | Description |\n|---|---|---|\n| `LLM_BASE_URL` | `http://10.106.1.89:8080/v1` | OpenAI-compatible LLM endpoint |\n| `LLM_API_KEY` | `dummy` | API key for the LLM server |\n| `STOIC_AGENT_PORT` | `41242` | Port for the A2A agent server |\n\n```bash\nLLM_BASE_URL=http://10.106.1.182:8888/v1 LLM_API_KEY=sk-your-key npm run build && npm start\n```"
+    },
+    "doc:README.md:client_package": {
+      "id": "doc:README.md:client_package",
+      "source": "README.md",
+      "source_type": "doc",
+      "location": "Client Package",
+      "description": "This section explains that the client code is located in the `client/` directory and is separated from the server to isolate testable logic from Node.js-specific dependencies.",
+      "keywords": [
+        "client",
+        "server separation",
+        "testable logic",
+        "Node-only dependencies",
+        "directory structure"
+      ],
+      "line_range": [
+        72,
+        75
+      ],
+      "raw_content": "The client lives in `client/` and is separated from the server to keep testable logic isolated from Node-only dependencies."
+    },
+    "doc:README.md:structure": {
+      "id": "doc:README.md:structure",
+      "source": "README.md",
+      "source_type": "doc",
+      "location": "Structure",
+      "description": "This section outlines the directory structure and file responsibilities for a client-side module, detailing its source code, unit tests, HTML entry point, and build pipeline.",
+      "keywords": [
+        "directory structure",
+        "client module",
+        "unit tests",
+        "build pipeline",
+        "source files"
+      ],
+      "line_range": [
+        76,
+        85
+      ],
+      "raw_content": "```\nclient/\n  src/client.ts         \u2190 Testable module (exports: extractTextFromEvent, isConversationFinished, renderText, processEventStream)\n  test/client.test.ts   \u2190 12 unit tests (no DOM, no network, no LLM)\n  index.html            \u2190 Source HTML (with placeholder for build)\n  build.mjs             \u2190 Build pipeline: tests \u2192 bundle \u2192 wire HTML \u2192 copy to dist/\n```"
+    },
+    "doc:README.md:client_commands": {
+      "id": "doc:README.md:client_commands",
+      "source": "README.md",
+      "source_type": "doc",
+      "location": "Client Commands",
+      "description": "This section outlines the client-side build commands and the sequential pipeline that executes tests, bundles TypeScript into minified ESM, processes HTML, and prepares files for serving.",
+      "keywords": [
+        "client commands",
+        "build pipeline",
+        "unit tests",
+        "bundling",
+        "ESM",
+        "dist"
+      ],
+      "line_range": [
+        86,
+        98
+      ],
+      "raw_content": "```bash\nnpm run build:client    # Run tests + bundle (outputs to dist/)\nnpm test                # Run unit tests only\n```\n\nThe build pipeline:\n1. Runs unit tests (fails fast if tests don't pass)\n2. Bundles `client/src/client.ts` \u2192 `dist/client.js` (minified ESM)\n3. Wires `client/index.html` \u2192 `dist/index.html` (replaces placeholder with app script)\n4. Copies `dist/client.js` and `dist/index.html` to root `dist/` for serving"
+    },
+    "doc:README.md:server_package": {
+      "id": "doc:README.md:server_package",
+      "source": "README.md",
+      "source_type": "doc",
+      "location": "Server Package",
+      "description": "This section outlines the location and core responsibilities of the server package, including A2A protocol handling, LLM integration, and RAG, along with commands for building and running it.",
+      "keywords": [
+        "server",
+        "src/",
+        "A2A protocol",
+        "LLM integration",
+        "RAG",
+        "npm run build:server",
+        "npm start"
+      ],
+      "line_range": [
+        99,
+        107
+      ],
+      "raw_content": "The server lives in `src/` and handles the A2A protocol, LLM integration, and RAG:\n\n```bash\nnpm run build:server    # Compile TypeScript \u2192 dist/\nnpm start               # Run compiled server\n```"
+    },
+    "doc:README.md:design": {
+      "id": "doc:README.md:design",
+      "source": "README.md",
+      "source_type": "doc",
+      "location": "Design",
+      "description": "This section outlines the minimalist visual design, dark mode support, Markdown rendering capabilities, conversation history management, and streaming response features of the user interface.",
+      "keywords": [
+        "minimalist UI",
+        "dark mode",
+        "Markdown rendering",
+        "conversation history",
+        "streaming responses"
+      ],
+      "line_range": [
+        108,
+        115
+      ],
+      "raw_content": "- Minimalist, colorless UI \u2014 clean typography, no distractions\n- Supports system dark mode (`prefers-color-scheme: dark`)\n- Markdown rendering for agent responses (bold, italic, lists, blockquotes)\n- Conversation history preserved across messages via A2A task lifecycle\n- Streaming responses with real-time updates"
+    },
+    "doc:README.md:open_source": {
+      "id": "doc:README.md:open_source",
+      "source": "README.md",
+      "source_type": "doc",
+      "location": "Open Source",
+      "description": "This section declares that the project is open source and distributed under the MIT License.",
+      "keywords": [
+        "open source",
+        "MIT License"
+      ],
+      "line_range": [
+        116,
+        119
+      ],
+      "raw_content": "This project is open source and available under the [MIT License](LICENSE)."
+    },
+    "doc:README.md:contributing": {
+      "id": "doc:README.md:contributing",
+      "source": "README.md",
+      "source_type": "doc",
+      "location": "Contributing",
+      "description": "This section invites users to contribute to the project and directs them to a detailed guide for getting started.",
+      "keywords": [
+        "contributions",
+        "guide",
+        "get started"
+      ],
+      "line_range": [
+        120,
+        123
+      ],
+      "raw_content": "We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details on how to get started."
+    },
+    "doc:README.md:code_of_conduct": {
+      "id": "doc:README.md:code_of_conduct",
+      "source": "README.md",
+      "source_type": "doc",
+      "location": "Code of Conduct",
+      "description": "This section directs users to read the Code of Conduct to ensure the project remains open and inclusive.",
+      "keywords": [
+        "Code of Conduct",
+        "open",
+        "inclusive"
+      ],
+      "line_range": [
+        124,
+        127
+      ],
+      "raw_content": "Please read our [Code of Conduct](CODE_OF_CONDUCT.md) to help us keep this project open and inclusive."
+    },
+    "doc:README.md:license": {
+      "id": "doc:README.md:license",
+      "source": "README.md",
+      "source_type": "doc",
+      "location": "License",
+      "description": "This section specifies that the project is distributed under the MIT License and directs users to the LICENSE file for further details.",
+      "keywords": [
+        "MIT License",
+        "LICENSE file",
+        "project licensing"
+      ],
+      "line_range": [
+        128,
+        130
+      ],
+      "raw_content": "This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details."
+    }
+  },
+  "matches": []
+}
