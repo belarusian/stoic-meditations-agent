@@ -1,8 +1,27 @@
 # Stoic What If Cards
 
-A web-based Stoic philosophy dialogue tool that reads from Marcus Aurelius' *Meditations* to help users reflect on present-moment challenges.
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-3178C6.svg)](https://www.typescriptlang.org/)
+
+A web-based Stoic philosophy dialogue tool that reads from Marcus Aurelius' *Meditations* to help users reflect on present-moment challenges through "What if?" scenarios.
+
+## Features
+
+- 🧠 **Stoic Philosophy Integration**: Pulls insights from Marcus Aurelius' *Meditations*
+- 💬 **Interactive Dialogue**: A2A protocol-based agent server for conversational reflection
+- 🎨 **Minimalist UI**: Clean, distraction-free design with dark mode support
+- 📝 **Markdown Rendering**: Supports bold, italic, lists, and blockquotes
+- 🔄 **Streaming Responses**: Real-time updates as the agent generates responses
+- 📚 **Conversation History**: Preserved across messages via A2A task lifecycle
+- 🧪 **Testable Architecture**: Separated client/server with 12+ unit tests
 
 ## Architecture
+
+```
+client/          ← Frontend (HTML + testable client module)
+src/             ← Backend (A2A agent server, Genkit, RAG)
+dist/            ← Built output (gitignored)
+```
 
 ```
 client/          ← Frontend (HTML + testable client module)
@@ -97,3 +116,19 @@ npm start               # Run compiled server
 - Markdown rendering for agent responses (bold, italic, lists, blockquotes)
 - Conversation history preserved across messages via A2A task lifecycle
 - Streaming responses with real-time updates
+
+## Open Source
+
+This project is open source and available under the [MIT License](LICENSE).
+
+### Contributing
+
+We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details on how to get started.
+
+### Code of Conduct
+
+Please read our [Code of Conduct](CODE_OF_CONDUCT.md) to help us keep this project open and inclusive.
+
+### License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.

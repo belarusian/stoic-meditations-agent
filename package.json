@@ -1,7 +1,7 @@
 {
   "name": "stoic-what-if-cards",
   "version": "1.0.0",
-  "description": "A simple web-based game for practicing Stoic resilience through 'What if?' scenarios.",
+  "description": "A web-based Stoic philosophy dialogue tool that reads from Marcus Aurelius' Meditations to help users reflect on present-moment challenges.",
   "main": "dist/index.js",
   "type": "module",
   "scripts": {
@@ -17,9 +17,19 @@
     "type": "git",
     "url": "git+https://github.com/belarusian/stoic-what-if-cards.git"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "stoic",
+    "philosophy",
+    "marcus-aurelius",
+    "meditations",
+    "ai-agent",
+    "a2a",
+    "genkit",
+    "web-app",
+    "dialogue-tool"
+  ],
+  "author": "belarusian",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/belarusian/stoic-what-if-cards/issues"
   },
