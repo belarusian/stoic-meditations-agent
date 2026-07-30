@@ -1,31 +1,27 @@
-# Stoic What If Cards
+# Stoic Meditations Agent
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-3178C6.svg)](https://www.typescriptlang.org/)
 
-A web-based Stoic philosophy dialogue tool that reads from Marcus Aurelius' *Meditations* to help users reflect on present-moment challenges through "What if?" scenarios.
+An A2A protocol-based AI agent that uses Marcus Aurelius' *Meditations* with RAG (ChromaDB) to provide Stoic philosophy dialogue via Genkit and OpenAI-compatible LLMs.
 
 ## Features
 
 - 🧠 **Stoic Philosophy Integration**: Pulls insights from Marcus Aurelius' *Meditations*
-- 💬 **Interactive Dialogue**: A2A protocol-based agent server for conversational reflection
+- 🤖 **AI Agent Server**: A2A protocol-based agent server for conversational reflection
+- 🔍 **RAG Integration**: ChromaDB vector store for semantic search over Meditations text
+- 🧩 **Genkit Framework**: Uses Genkit with OpenAI-compatible LLMs (llama.cpp, vLLM, Ollama)
 - 🎨 **Minimalist UI**: Clean, distraction-free design with dark mode support
 - 📝 **Markdown Rendering**: Supports bold, italic, lists, and blockquotes
 - 🔄 **Streaming Responses**: Real-time updates as the agent generates responses
 - 📚 **Conversation History**: Preserved across messages via A2A task lifecycle
-- 🧪 **Testable Architecture**: Separated client/server with 12+ unit tests
+- 🧪 **Testable Architecture**: Separated client/server with unit tests
 
 ## Architecture
 
 ```
 client/          ← Frontend (HTML + testable client module)
-src/             ← Backend (A2A agent server, Genkit, RAG)
-dist/            ← Built output (gitignored)
-```
-
-```
-client/          ← Frontend (HTML + testable client module)
-src/             ← Backend (A2A agent server, Genkit, RAG)
+src/             ← Backend (A2A agent server, Genkit, RAG, ChromaDB)
 dist/            ← Built output (gitignored)
 ```
 
