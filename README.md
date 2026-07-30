@@ -1,5 +1,6 @@
 # Stoic Meditations Agent
 
+[![CI](https://github.com/belarusian/stoic-meditations-agent/actions/workflows/ci.yml/badge.svg)](https://github.com/belarusian/stoic-meditations-agent/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-3178C6.svg)](https://www.typescriptlang.org/)
 
