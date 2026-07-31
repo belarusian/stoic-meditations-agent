@@ -5,9 +5,9 @@
     "file_hashes": {
       "AGENT.md": "f4203c707ac054155f86a01b5e27cc7ef318e9f552a35021975e182ac182cfc8",
       "AGENTS.md": "f57e4f5f299c680ccb11e378371ccda12a17ec15ee0d40a26673849af4b57f48",
-      "CODE_OF_CONDUCT.md": "4b40bf3672cff9f92b9880fcf669dcf84dfefaced5420aaca4ddaa9f52bc89bb",
-      "CONTRIBUTING.md": "66315030b66940686775b3813c8c24875fae219d8e6eee5a8e75fd1723ec8234",
-      "README.md": "79b3c6523958c778389af6a26939578e45d8adbf24f3e446fe834082f1508e8c"
+      "test-minimal.mjs": "eae59306a486bc4eb66cd1536f84cf3096a3062b88ddee290ba0f556c9aa05fb",
+      "client/build.mjs": "8a05e3790fa37f383b6b13005fb3c677eff248ced1730190a56ebccbcf9d406d",
+      "client/test/client.test.ts": "9372f9db69c77115ea4f4c07d074c9e4972bc24d7e89b43b8921dbf879baf0c5"
     }
   },
   "concepts": {
@@ -491,644 +491,158 @@
       ],
       "raw_content": "When engaging with users, the model should:\n- Be calm, thoughtful, and measured\n- Reference Meditations appropriately\n- Ask probing questions to guide self-reflection\n- Help users see situations through a Stoic lens\n- Encourage action aligned with virtue\n- Remember: \"The happiness of your life depends upon the quality of your thoughts\""
     },
-    "doc:CODE_OF_CONDUCT.md:our_pledge": {
-      "id": "doc:CODE_OF_CONDUCT.md:our_pledge",
-      "source": "CODE_OF_CONDUCT.md",
-      "source_type": "doc",
-      "location": "Our Pledge",
-      "description": "This section outlines a commitment by community members to ensure a harassment-free, inclusive, and welcoming environment for all participants regardless of their personal characteristics.",
+    "code:test-minimal.mjs:chunk_0": {
+      "id": "code:test-minimal.mjs:chunk_0",
+      "source": "test-minimal.mjs",
+      "source_type": "code",
+      "location": "chunk_0",
+      "description": "This script tests an AI agent's conversational memory by sending a message containing the number 42 and then verifying if the agent recalls it in a subsequent turn within the same task context.",
       "keywords": [
-        "pledge",
-        "harassment-free",
-        "inclusivity",
-        "diversity",
-        "community standards"
+        "A2A protocol",
+        "conversational memory",
+        "context retention",
+        "agent testing",
+        "task continuity"
       ],
       "line_range": [
-        3,
-        14
+        1,
+        29
       ],
-      "raw_content": "We as members, contributors, and leaders pledge to make participation in our\ncommunity a harassment-free experience for everyone, regardless of age, body\nsize, visible or invisible disability, ethnicity, sex characteristics, gender\nidentity and expression, level of experience, education, socio-economic status,\nnationality, personal appearance, race, religion, or sexual identity\nand orientation.\n\nWe pledge to act and interact in ways that contribute to an open, welcoming,\ndiverse, inclusive, and "
+      "raw_content": "import { ClientFactory } from '@a2a-js/sdk/client';\n\nconst factory = new ClientFactory();\nconst client = await factory.createFromUrl('http://localhost:41245');\n\n// Message 1: give a specific number\nconst r1 = await client.sendMessage({\n  message: { kind: 'message', messageId: crypto.randomUUID(), role: 'user', parts: [{ kind: 'text', text: 'I am reflecting on the number 42 today.' }] }\n});\nconst text1 = r1.kind === 'message' ? r1.parts[0].text : r1.status?.message?.parts[0]?.text;\nconsole.log('="
     },
-    "doc:CODE_OF_CONDUCT.md:our_standards": {
-      "id": "doc:CODE_OF_CONDUCT.md:our_standards",
-      "source": "CODE_OF_CONDUCT.md",
-      "source_type": "doc",
-      "location": "Our Standards",
-      "description": "This section outlines the expected positive behaviors and prohibited actions to maintain a respectful and professional community environment.",
+    "code:client/build.mjs:chunk_0": {
+      "id": "code:client/build.mjs:chunk_0",
+      "source": "client/build.mjs",
+      "source_type": "code",
+      "location": "chunk_0",
+      "description": "This script orchestrates a client-side build process by running Vitest tests, bundling TypeScript source into a minified JavaScript module using esbuild, and preparing an HTML entry point that imports the bundled logic alongside external SDK dependencies.",
       "keywords": [
-        "community standards",
-        "acceptable behavior",
-        "unacceptable behavior",
-        "code of conduct",
-        "harassment"
+        "build automation",
+        "esbuild",
+        "vitest",
+        "typescript bundling",
+        "client-side rendering"
       ],
       "line_range": [
-        15,
-        38
-      ],
-      "raw_content": "Examples of behavior that contributes to a positive environment for our\ncommunity include:\n\n* Demonstrating empathy and kindness toward other people\n* Being respectful of differing opinions, viewpoints, and experiences\n* Giving and gracefully accepting constructive feedback\n* Accepting responsibility and apologizing to those affected by our mistakes,\n  and learning from the experience\n* Focusing on what is best not just for us as individuals, but for the\n  overall community\n\nExamples of unaccept"
-    },
-    "doc:CODE_OF_CONDUCT.md:enforcement_responsibilities": {
-      "id": "doc:CODE_OF_CONDUCT.md:enforcement_responsibilities",
-      "source": "CODE_OF_CONDUCT.md",
-      "source_type": "doc",
-      "location": "Enforcement Responsibilities",
-      "description": "This section defines the authority and duties of community leaders to clarify behavioral standards and enforce them through fair corrective actions against inappropriate conduct.",
-      "keywords": [
-        "community leaders",
-        "enforcement",
-        "standards",
-        "corrective action",
-        "behavior"
-      ],
-      "line_range": [
-        39,
-        45
-      ],
-      "raw_content": "Community leaders are responsible for clarifying and enforcing our standards of\nacceptable behavior and will take appropriate and fair corrective action in\nresponse to any behavior that they deem inappropriate, threatening, offensive,\nor harmful."
-    },
-    "doc:CODE_OF_CONDUCT.md:scope": {
-      "id": "doc:CODE_OF_CONDUCT.md:scope",
-      "source": "CODE_OF_CONDUCT.md",
-      "source_type": "doc",
-      "location": "Scope",
-      "description": "This section defines the applicability of the Code of Conduct to both internal community spaces and public interactions where individuals officially represent the community.",
-      "keywords": [
-        "scope",
-        "community spaces",
-        "public representation",
-        "applicability"
-      ],
-      "line_range": [
-        46,
+        1,
         50
       ],
-      "raw_content": "This Code of Conduct applies within all community spaces, and also applies when\nan individual is officially representing the community in public spaces."
+      "raw_content": "import * as esbuild from 'esbuild';\nimport { spawnSync } from 'child_process';\nimport { resolve, dirname } from 'path';\nimport { writeFileSync, readFileSync, mkdirSync, copyFileSync } from 'fs';\nimport { fileURLToPath } from 'url';\n\nconst __dirname = dirname(fileURLToPath(import.meta.url));\nconst clientDir = resolve(__dirname);\nconst distDir = resolve(clientDir, 'dist');\n\n// 1. Run tests\nconsole.log('[build] Running tests...');\nconst testResult = spawnSync('npx', ['vitest', 'run'], {\n  cwd: clie"
     },
-    "doc:CODE_OF_CONDUCT.md:enforcement": {
-      "id": "doc:CODE_OF_CONDUCT.md:enforcement",
-      "source": "CODE_OF_CONDUCT.md",
-      "source_type": "doc",
-      "location": "Enforcement",
-      "description": "This section outlines the procedure for reporting unacceptable behavior to community leaders and guarantees a prompt, fair investigation of all complaints.",
+    "code:client/build.mjs:chunk_1": {
+      "id": "code:client/build.mjs:chunk_1",
+      "source": "client/build.mjs",
+      "source_type": "code",
+      "location": "chunk_1",
+      "description": "This client-side JavaScript module manages a chat interface by rendering user and agent messages, handling streaming responses from an AI service, and updating the UI with loading states and parsed content.",
       "keywords": [
-        "enforcement",
-        "reporting",
-        "abusive behavior",
-        "investigation",
-        "community leaders"
+        "chat-interface",
+        "streaming-response",
+        "dom-manipulation",
+        "async-handling",
+        "message-rendering"
       ],
       "line_range": [
         51,
-        56
+        100
       ],
-      "raw_content": "Instances of abusive, harassing, or otherwise unacceptable behavior may be\nreported to the community leaders responsible for enforcement at\nsasha@compsci.boutique. All complaints will be reviewed and investigated promptly and fairly."
+      "raw_content": "    let taskId = null;\n    let loadingDiv = null;\n\n    function addMessage(role, text) {\n        const chat = document.getElementById('chat-messages');\n        const msgDiv = document.createElement('div');\n        msgDiv.className = 'message ' + role;\n        if (role === 'agent') {\n            const header = document.createElement('div');\n            header.className = 'message-header';\n            header.textContent = 'Stoic Guide';\n            msgDiv.appendChild(header);\n        }\n        con"
     },
-    "doc:CODE_OF_CONDUCT.md:attribution": {
-      "id": "doc:CODE_OF_CONDUCT.md:attribution",
-      "source": "CODE_OF_CONDUCT.md",
-      "source_type": "doc",
-      "location": "Attribution",
-      "description": "This section attributes the Code of Conduct to version 2.1 of the Contributor Covenant and provides links to its source.",
+    "code:client/build.mjs:chunk_2": {
+      "id": "code:client/build.mjs:chunk_2",
+      "source": "client/build.mjs",
+      "source_type": "code",
+      "location": "chunk_2",
+      "description": "The code handles the finalization of an agent's response by updating the UI, managing conversation state identifiers, and resetting task IDs upon completion, while also defining a function to initiate a new dialogue with a Stoic-themed prompt.",
       "keywords": [
-        "attribution",
-        "Contributor Covenant",
-        "version 2.1",
-        "source"
+        "event handling",
+        "UI update",
+        "state management",
+        "task reset",
+        "dialogue initialization"
       ],
       "line_range": [
-        57,
-        63
+        101,
+        150
       ],
-      "raw_content": "This Code of Conduct is adapted from the [Contributor Covenant][homepage],\nversion 2.1, available at\nhttps://www.contributor-covenant.org/version/2/1/code_of_conduct.html\n\n[homepage]: https://www.contributor-covenant.org"
+      "raw_content": "                    }\n                    if (event.final && event.status?.message && event.status.message.messageId !== lastFinalState) {\n                        lastFinalState = event.status.message.messageId;\n                        const t = extractTextFromEvent(event);\n                        if (t) response = t;\n                    }\n                } else {\n                    const t = extractTextFromEvent(event);\n                    if (t) response = t;\n                }\n               "
     },
-    "doc:CONTRIBUTING.md:contributing_to_stoic_what_if_cards": {
-      "id": "doc:CONTRIBUTING.md:contributing_to_stoic_what_if_cards",
-      "source": "CONTRIBUTING.md",
-      "source_type": "doc",
-      "location": "Contributing to Stoic What If Cards",
-      "description": "This section serves as a welcoming introduction for individuals interested in contributing to the Stoic What If Cards project.",
+    "code:client/build.mjs:chunk_3": {
+      "id": "code:client/build.mjs:chunk_3",
+      "source": "client/build.mjs",
+      "source_type": "code",
+      "location": "chunk_3",
+      "description": "This code implements a client-side interface for interacting with a 'Stoic Guide' AI agent, handling event stream parsing for status updates and text responses, managing UI loading states, and initializing the connection via a factory pattern.",
       "keywords": [
-        "contributing",
-        "Stoic What If Cards",
-        "interest"
+        "client-side",
+        "event-streaming",
+        "AI-agent",
+        "UI-management",
+        "connection-initialization"
+      ],
+      "line_range": [
+        151,
+        200
+      ],
+      "raw_content": "                if (event.kind === 'status-update') {\n                    if (event.final && event.status?.message && event.status.message.messageId !== lastFinalState) {\n                        lastFinalState = event.status.message.messageId;\n                        const t = extractTextFromEvent(event);\n                        if (t) response = t;\n                    }\n                } else {\n                    const t = extractTextFromEvent(event);\n                    if (t) response = t;\n "
+    },
+    "code:client/build.mjs:chunk_4": {
+      "id": "code:client/build.mjs:chunk_4",
+      "source": "client/build.mjs",
+      "source_type": "code",
+      "location": "chunk_4",
+      "description": "The code finalizes a build process by injecting a script into an HTML template, writing the output to a distribution directory, and copying the generated assets to a root-level dist folder for serving.",
+      "keywords": [
+        "build",
+        "asset-copying",
+        "html-injection",
+        "file-system-operations",
+        "distribution"
+      ],
+      "line_range": [
+        201,
+        219
+      ],
+      "raw_content": "        this.style.height = '52px';\n        this.style.height = Math.min(this.scrollHeight, 200) + 'px';\n    });\n</script>\n`;\n\nhtml = html.replace('<!-- PLACEHOLDER_SCRIPT -->', appScript);\nwriteFileSync(resolve(distDir, 'index.html'), html);\nconsole.log('[build] Built dist/index.html');\n\n// 4. Copy built assets to root dist/ for serving\nconst rootDistDir = resolve(resolve(__dirname, '..'), 'dist');\nmkdirSync(rootDistDir, { recursive: true });\ncopyFileSync(resolve(distDir, 'index.html'), resolve"
+    },
+    "code:client/test/client.test.ts:chunk_0": {
+      "id": "code:client/test/client.test.ts:chunk_0",
+      "source": "client/test/client.test.ts",
+      "source_type": "code",
+      "location": "chunk_0",
+      "description": "This code defines unit tests for client-side utility functions that sanitize text output by removing specific status markers and extract content from structured event objects.",
+      "keywords": [
+        "unit testing",
+        "vitest",
+        "text sanitization",
+        "marker removal",
+        "event parsing",
+        "client-side logic"
       ],
       "line_range": [
         1,
-        4
-      ],
-      "raw_content": "Thank you for your interest in contributing to Stoic What If Cards!"
-    },
-    "doc:CONTRIBUTING.md:how_to_contribute": {
-      "id": "doc:CONTRIBUTING.md:how_to_contribute",
-      "source": "CONTRIBUTING.md",
-      "source_type": "doc",
-      "location": "How to Contribute",
-      "description": "This section outlines the standard workflow for contributing code to a project, including forking, coding, testing, and submitting pull requests.",
-      "keywords": [
-        "contribute",
-        "fork",
-        "pull request",
-        "coding standards",
-        "testing"
-      ],
-      "line_range": [
-        5,
-        11
-      ],
-      "raw_content": "1. **Fork the repository** and create your branch from `main`\n2. **Make your changes** following the project's coding standards\n3. **Test your changes** locally before submitting\n4. **Submit a pull request** with a clear description of your changes"
-    },
-    "doc:CONTRIBUTING.md:development_setup": {
-      "id": "doc:CONTRIBUTING.md:development_setup",
-      "source": "CONTRIBUTING.md",
-      "source_type": "doc",
-      "location": "Development Setup",
-      "description": "This section provides instructions for configuring the local environment to begin software development.",
-      "keywords": [
-        "development",
-        "setup",
-        "environment",
-        "configuration"
-      ],
-      "line_range": [
-        12,
-        14
-      ],
-      "raw_content": "```bash"
-    },
-    "doc:CONTRIBUTING.md:clone_your_fork": {
-      "id": "doc:CONTRIBUTING.md:clone_your_fork",
-      "source": "CONTRIBUTING.md",
-      "source_type": "doc",
-      "location": "Clone your fork",
-      "description": "This section explains how to download a local copy of your forked repository from GitHub and navigate into the project directory.",
-      "keywords": [
-        "git clone",
-        "fork",
-        "repository",
-        "local copy",
-        "directory"
-      ],
-      "line_range": [
-        15,
-        18
-      ],
-      "raw_content": "git clone https://github.com/YOUR_USERNAME/stoic-what-if-cards.git\ncd stoic-what-if-cards"
-    },
-    "doc:CONTRIBUTING.md:install_dependencies": {
-      "id": "doc:CONTRIBUTING.md:install_dependencies",
-      "source": "CONTRIBUTING.md",
-      "source_type": "doc",
-      "location": "Install dependencies",
-      "description": "This section instructs the user to run the npm install command to download and set up the project's required dependencies.",
-      "keywords": [
-        "npm",
-        "install",
-        "dependencies"
-      ],
-      "line_range": [
-        19,
-        21
-      ],
-      "raw_content": "npm install"
-    },
-    "doc:CONTRIBUTING.md:run_tests": {
-      "id": "doc:CONTRIBUTING.md:run_tests",
-      "source": "CONTRIBUTING.md",
-      "source_type": "doc",
-      "location": "Run tests",
-      "description": "This section provides the command to execute the project's test suite using npm.",
-      "keywords": [
-        "npm",
-        "test",
-        "testing"
-      ],
-      "line_range": [
-        22,
-        24
-      ],
-      "raw_content": "npm test"
-    },
-    "doc:CONTRIBUTING.md:build_the_project": {
-      "id": "doc:CONTRIBUTING.md:build_the_project",
-      "source": "CONTRIBUTING.md",
-      "source_type": "doc",
-      "location": "Build the project",
-      "description": "This section explains how to compile the project using the npm build script.",
-      "keywords": [
-        "build",
-        "npm",
-        "compile"
-      ],
-      "line_range": [
-        25,
-        27
-      ],
-      "raw_content": "npm run build"
-    },
-    "doc:CONTRIBUTING.md:start_the_server": {
-      "id": "doc:CONTRIBUTING.md:start_the_server",
-      "source": "CONTRIBUTING.md",
-      "source_type": "doc",
-      "location": "Start the server",
-      "description": "This section provides the command to initiate the server using npm.",
-      "keywords": [
-        "npm",
-        "start",
-        "server"
-      ],
-      "line_range": [
-        28,
-        31
-      ],
-      "raw_content": "npm start\n```"
-    },
-    "doc:CONTRIBUTING.md:code_style": {
-      "id": "doc:CONTRIBUTING.md:code_style",
-      "source": "CONTRIBUTING.md",
-      "source_type": "doc",
-      "location": "Code Style",
-      "description": "This section outlines the mandatory technical standards for code consistency, including the use of TypeScript across all environments and adherence to existing conventions and testing protocols.",
-      "keywords": [
-        "TypeScript",
-        "code style",
-        "conventions",
-        "testing",
-        "pull request"
-      ],
-      "line_range": [
-        32,
-        37
-      ],
-      "raw_content": "- TypeScript is used for both client and server code\n- Follow existing code patterns and conventions\n- Ensure all tests pass before submitting a PR"
-    },
-    "doc:CONTRIBUTING.md:reporting_issues": {
-      "id": "doc:CONTRIBUTING.md:reporting_issues",
-      "source": "CONTRIBUTING.md",
-      "source_type": "doc",
-      "location": "Reporting Issues",
-      "description": "This section outlines the required information and process for submitting bug reports or feature requests via GitHub issues.",
-      "keywords": [
-        "reporting",
-        "issues",
-        "GitHub",
-        "bugs",
-        "feature requests"
-      ],
-      "line_range": [
-        38,
-        44
-      ],
-      "raw_content": "If you find a bug or have a feature request, please open an issue on GitHub with:\n- A clear description of the problem or feature\n- Steps to reproduce (for bugs)\n- Expected vs actual behavior"
-    },
-    "doc:CONTRIBUTING.md:pull_request_process": {
-      "id": "doc:CONTRIBUTING.md:pull_request_process",
-      "source": "CONTRIBUTING.md",
-      "source_type": "doc",
-      "location": "Pull Request Process",
-      "description": "This section outlines the mandatory requirements and workflow steps for submitting a pull request, including documentation standards, issue linking, test validation, and maintainer review.",
-      "keywords": [
-        "pull request",
-        "title",
-        "description",
-        "issues",
-        "tests",
-        "review",
-        "maintainers"
-      ],
-      "line_range": [
-        45,
         50
       ],
-      "raw_content": "1. Ensure your PR has a clear title and description\n2. Reference any related issues\n3. All tests must pass\n4. Changes will be reviewed by the maintainers"
+      "raw_content": "import { describe, it, expect } from 'vitest';\nimport {\n  renderText,\n  extractTextFromEvent,\n} from '../src/client';\n\ndescribe('renderText', () => {\n  it('strips trailing AWAITING_USER_INPUT marker', () => {\n    expect(renderText('Hello world\\nAWAITING_USER_INPUT')).toBe('Hello world');\n  });\n\n  it('strips trailing COMPLETED marker', () => {\n    expect(renderText('Hello world\\nCOMPLETED')).toBe('Hello world');\n  });\n\n  it('strips markers from the end of multiline text', () => {\n    expect(rende"
     },
-    "doc:README.md:stoic_meditations_agent": {
-      "id": "doc:README.md:stoic_meditations_agent",
-      "source": "README.md",
-      "source_type": "doc",
-      "location": "Stoic Meditations Agent",
-      "description": "This section introduces the Stoic Meditations Agent, an A2A protocol-based AI tool that leverages RAG with ChromaDB and OpenAI-compatible LLMs to facilitate Stoic philosophy dialogues based on Marcus Aurelius' Meditations.",
+    "code:client/test/client.test.ts:chunk_1": {
+      "id": "code:client/test/client.test.ts:chunk_1",
+      "source": "client/test/client.test.ts",
+      "source_type": "code",
+      "location": "chunk_1",
+      "description": "This code defines unit tests for a function that extracts text content from various event objects, handling different event types and edge cases like missing or empty text parts.",
       "keywords": [
-        "Stoic Meditations Agent",
-        "A2A protocol",
-        "RAG",
-        "ChromaDB",
-        "Genkit",
-        "OpenAI-compatible LLMs",
-        "Marcus Aurelius",
-        "TypeScript"
+        "unit testing",
+        "text extraction",
+        "event handling",
+        "edge cases",
+        "Jest"
       ],
       "line_range": [
-        1,
-        7
+        51,
+        86
       ],
-      "raw_content": "[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)\n[![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-3178C6.svg)](https://www.typescriptlang.org/)\n\nAn A2A protocol-based AI agent that uses Marcus Aurelius' *Meditations* with RAG (ChromaDB) to provide Stoic philosophy dialogue via Genkit and OpenAI-compatible LLMs."
-    },
-    "doc:README.md:features": {
-      "id": "doc:README.md:features",
-      "source": "README.md",
-      "source_type": "doc",
-      "location": "Features",
-      "description": "This section outlines the core technical and functional capabilities of the application, highlighting its integration of Stoic philosophy with AI-driven conversational agents, vector search, and a minimalist user interface.",
-      "keywords": [
-        "Stoic Philosophy",
-        "AI Agent Server",
-        "RAG Integration",
-        "Genkit Framework",
-        "Minimalist UI",
-        "Streaming Responses",
-        "Conversation History"
-      ],
-      "line_range": [
-        8,
-        19
-      ],
-      "raw_content": "- \ud83e\udde0 **Stoic Philosophy Integration**: Pulls insights from Marcus Aurelius' *Meditations*\n- \ud83e\udd16 **AI Agent Server**: A2A protocol-based agent server for conversational reflection\n- \ud83d\udd0d **RAG Integration**: ChromaDB vector store for semantic search over Meditations text\n- \ud83e\udde9 **Genkit Framework**: Uses Genkit with OpenAI-compatible LLMs (llama.cpp, vLLM, Ollama)\n- \ud83c\udfa8 **Minimalist UI**: Clean, distraction-free design with dark mode support\n- \ud83d\udcdd **Markdown Rendering**: Supports bold, italic, lists, and bloc"
-    },
-    "doc:README.md:architecture": {
-      "id": "doc:README.md:architecture",
-      "source": "README.md",
-      "source_type": "doc",
-      "location": "Architecture",
-      "description": "This section outlines the project's directory structure, distinguishing between frontend client files, backend server components including AI agents and vector databases, and built output artifacts.",
-      "keywords": [
-        "directory structure",
-        "frontend",
-        "backend",
-        "A2A agent",
-        "Genkit",
-        "RAG",
-        "ChromaDB",
-        "build output"
-      ],
-      "line_range": [
-        20,
-        27
-      ],
-      "raw_content": "```\nclient/          \u2190 Frontend (HTML + testable client module)\nsrc/             \u2190 Backend (A2A agent server, Genkit, RAG, ChromaDB)\ndist/            \u2190 Built output (gitignored)\n```"
-    },
-    "doc:README.md:setup": {
-      "id": "doc:README.md:setup",
-      "source": "README.md",
-      "source_type": "doc",
-      "location": "Setup",
-      "description": "This section explains how to install project dependencies using npm.",
-      "keywords": [
-        "npm",
-        "install",
-        "dependencies",
-        "setup"
-      ],
-      "line_range": [
-        28,
-        33
-      ],
-      "raw_content": "```bash\nnpm install\n```"
-    },
-    "doc:README.md:server_(a2a_+_llm_proxy)": {
-      "id": "doc:README.md:server_(a2a_+_llm_proxy)",
-      "source": "README.md",
-      "source_type": "doc",
-      "location": "Server (A2A + LLM proxy)",
-      "description": "This section provides the commands to compile the TypeScript server code and start the A2A and LLM proxy agent on localhost port 41242.",
-      "keywords": [
-        "server",
-        "build",
-        "start",
-        "TypeScript",
-        "npm",
-        "proxy",
-        "agent"
-      ],
-      "line_range": [
-        36,
-        42
-      ],
-      "raw_content": "```bash\nnpm run build:server    # Compile TypeScript \u2192 dist/\nnpm start               # Start agent server on localhost:41242\n```"
-    },
-    "doc:README.md:client_(web_ui)": {
-      "id": "doc:README.md:client_(web_ui)",
-      "source": "README.md",
-      "source_type": "doc",
-      "location": "Client (web UI)",
-      "description": "This section outlines the commands to build the client-side web interface and serve the resulting assets locally.",
-      "keywords": [
-        "client",
-        "web UI",
-        "npm",
-        "build",
-        "serve",
-        "dist"
-      ],
-      "line_range": [
-        43,
-        49
-      ],
-      "raw_content": "```bash\nnpm run build:client    # Run tests + bundle \u2192 dist/index.html + dist/client.js\nnpx serve dist -l 3000  # Serve built assets from dist/ on localhost:3000\n```"
-    },
-    "doc:README.md:both_together": {
-      "id": "doc:README.md:both_together",
-      "source": "README.md",
-      "source_type": "doc",
-      "location": "Both together",
-      "description": "This section outlines the commands required to compile, start, and serve a full-stack application locally.",
-      "keywords": [
-        "npm",
-        "build",
-        "start",
-        "serve",
-        "localhost"
-      ],
-      "line_range": [
-        50,
-        57
-      ],
-      "raw_content": "```bash\nnpm run build           # Compiles server + runs client build (tests + bundle)\nnpm start &             # Start server in background\nnpx serve . -l 3000     # Open browser at localhost:3000\n```"
-    },
-    "doc:README.md:configuration": {
-      "id": "doc:README.md:configuration",
-      "source": "README.md",
-      "source_type": "doc",
-      "location": "Configuration",
-      "description": "This section details the required environment variables and their default values for configuring the LLM endpoint, API key, and server port before starting the application.",
-      "keywords": [
-        "environment variables",
-        "LLM_BASE_URL",
-        "LLM_API_KEY",
-        "STOIC_AGENT_PORT",
-        "configuration"
-      ],
-      "line_range": [
-        58,
-        71
-      ],
-      "raw_content": "Set environment variables before running the server:\n\n| Variable | Default | Description |\n|---|---|---|\n| `LLM_BASE_URL` | `http://10.106.1.89:8080/v1` | OpenAI-compatible LLM endpoint |\n| `LLM_API_KEY` | `dummy` | API key for the LLM server |\n| `STOIC_AGENT_PORT` | `41242` | Port for the A2A agent server |\n\n```bash\nLLM_BASE_URL=http://10.106.1.182:8888/v1 LLM_API_KEY=sk-your-key npm run build && npm start\n```"
-    },
-    "doc:README.md:client_package": {
-      "id": "doc:README.md:client_package",
-      "source": "README.md",
-      "source_type": "doc",
-      "location": "Client Package",
-      "description": "This section explains that the client code is located in the `client/` directory and is separated from the server to isolate testable logic from Node.js-specific dependencies.",
-      "keywords": [
-        "client",
-        "server separation",
-        "testable logic",
-        "Node-only dependencies",
-        "directory structure"
-      ],
-      "line_range": [
-        72,
-        75
-      ],
-      "raw_content": "The client lives in `client/` and is separated from the server to keep testable logic isolated from Node-only dependencies."
-    },
-    "doc:README.md:structure": {
-      "id": "doc:README.md:structure",
-      "source": "README.md",
-      "source_type": "doc",
-      "location": "Structure",
-      "description": "This section outlines the directory structure and file responsibilities for a client-side module, detailing its source code, unit tests, HTML entry point, and build pipeline.",
-      "keywords": [
-        "directory structure",
-        "client module",
-        "unit tests",
-        "build pipeline",
-        "source files"
-      ],
-      "line_range": [
-        76,
-        85
-      ],
-      "raw_content": "```\nclient/\n  src/client.ts         \u2190 Testable module (exports: extractTextFromEvent, isConversationFinished, renderText, processEventStream)\n  test/client.test.ts   \u2190 12 unit tests (no DOM, no network, no LLM)\n  index.html            \u2190 Source HTML (with placeholder for build)\n  build.mjs             \u2190 Build pipeline: tests \u2192 bundle \u2192 wire HTML \u2192 copy to dist/\n```"
-    },
-    "doc:README.md:client_commands": {
-      "id": "doc:README.md:client_commands",
-      "source": "README.md",
-      "source_type": "doc",
-      "location": "Client Commands",
-      "description": "This section outlines the client-side build commands and the sequential pipeline that executes tests, bundles TypeScript into minified ESM, processes HTML, and prepares files for serving.",
-      "keywords": [
-        "client commands",
-        "build pipeline",
-        "unit tests",
-        "bundling",
-        "ESM",
-        "dist"
-      ],
-      "line_range": [
-        86,
-        98
-      ],
-      "raw_content": "```bash\nnpm run build:client    # Run tests + bundle (outputs to dist/)\nnpm test                # Run unit tests only\n```\n\nThe build pipeline:\n1. Runs unit tests (fails fast if tests don't pass)\n2. Bundles `client/src/client.ts` \u2192 `dist/client.js` (minified ESM)\n3. Wires `client/index.html` \u2192 `dist/index.html` (replaces placeholder with app script)\n4. Copies `dist/client.js` and `dist/index.html` to root `dist/` for serving"
-    },
-    "doc:README.md:server_package": {
-      "id": "doc:README.md:server_package",
-      "source": "README.md",
-      "source_type": "doc",
-      "location": "Server Package",
-      "description": "This section outlines the location and core responsibilities of the server package, including A2A protocol handling, LLM integration, and RAG, along with commands for building and running it.",
-      "keywords": [
-        "server",
-        "src/",
-        "A2A protocol",
-        "LLM integration",
-        "RAG",
-        "npm run build:server",
-        "npm start"
-      ],
-      "line_range": [
-        99,
-        107
-      ],
-      "raw_content": "The server lives in `src/` and handles the A2A protocol, LLM integration, and RAG:\n\n```bash\nnpm run build:server    # Compile TypeScript \u2192 dist/\nnpm start               # Run compiled server\n```"
-    },
-    "doc:README.md:design": {
-      "id": "doc:README.md:design",
-      "source": "README.md",
-      "source_type": "doc",
-      "location": "Design",
-      "description": "This section outlines the minimalist visual design, dark mode support, Markdown rendering capabilities, conversation history management, and streaming response features of the user interface.",
-      "keywords": [
-        "minimalist UI",
-        "dark mode",
-        "Markdown rendering",
-        "conversation history",
-        "streaming responses"
-      ],
-      "line_range": [
-        108,
-        115
-      ],
-      "raw_content": "- Minimalist, colorless UI \u2014 clean typography, no distractions\n- Supports system dark mode (`prefers-color-scheme: dark`)\n- Markdown rendering for agent responses (bold, italic, lists, blockquotes)\n- Conversation history preserved across messages via A2A task lifecycle\n- Streaming responses with real-time updates"
-    },
-    "doc:README.md:open_source": {
-      "id": "doc:README.md:open_source",
-      "source": "README.md",
-      "source_type": "doc",
-      "location": "Open Source",
-      "description": "This section declares that the project is open source and distributed under the MIT License.",
-      "keywords": [
-        "open source",
-        "MIT License"
-      ],
-      "line_range": [
-        116,
-        119
-      ],
-      "raw_content": "This project is open source and available under the [MIT License](LICENSE)."
-    },
-    "doc:README.md:contributing": {
-      "id": "doc:README.md:contributing",
-      "source": "README.md",
-      "source_type": "doc",
-      "location": "Contributing",
-      "description": "This section invites users to contribute to the project and directs them to a detailed guide for getting started.",
-      "keywords": [
-        "contributions",
-        "guide",
-        "get started"
-      ],
-      "line_range": [
-        120,
-        123
-      ],
-      "raw_content": "We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details on how to get started."
-    },
-    "doc:README.md:code_of_conduct": {
-      "id": "doc:README.md:code_of_conduct",
-      "source": "README.md",
-      "source_type": "doc",
-      "location": "Code of Conduct",
-      "description": "This section directs users to read the Code of Conduct to ensure the project remains open and inclusive.",
-      "keywords": [
-        "Code of Conduct",
-        "open",
-        "inclusive"
-      ],
-      "line_range": [
-        124,
-        127
-      ],
-      "raw_content": "Please read our [Code of Conduct](CODE_OF_CONDUCT.md) to help us keep this project open and inclusive."
-    },
-    "doc:README.md:license": {
-      "id": "doc:README.md:license",
-      "source": "README.md",
-      "source_type": "doc",
-      "location": "License",
-      "description": "This section specifies that the project is distributed under the MIT License and directs users to the LICENSE file for further details.",
-      "keywords": [
-        "MIT License",
-        "LICENSE file",
-        "project licensing"
-      ],
-      "line_range": [
-        128,
-        130
-      ],
-      "raw_content": "This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details."
+      "raw_content": "    expect(extractTextFromEvent(event)).toBe('Direct response text');\n  });\n\n  it('extracts text from a task event', () => {\n    const event = {\n      kind: 'task',\n      status: {\n        message: {\n          messageId: 'abc123',\n          parts: [{ text: 'Task message text' }],\n        },\n      },\n    };\n    expect(extractTextFromEvent(event)).toBe('Task message text');\n  });\n\n  it('returns empty string for unrecognized events', () => {\n    expect(extractTextFromEvent({ kind: 'unknown' })).toB"
     }
   },
   "matches": []
