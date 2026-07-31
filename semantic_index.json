@@ -496,13 +496,13 @@
       "source": "test-minimal.mjs",
       "source_type": "code",
       "location": "chunk_0",
-      "description": "This script tests an AI agent's conversational memory by sending a message containing the number 42 and then verifying if the agent recalls it in a subsequent turn within the same task context.",
+      "description": "Tests whether an A2A agent maintains conversation context by verifying it recalls a specific number mentioned in a previous message.",
       "keywords": [
-        "A2A protocol",
-        "conversational memory",
-        "context retention",
-        "agent testing",
-        "task continuity"
+        "A2A",
+        "context-memory",
+        "integration-test",
+        "conversation-history",
+        "LLM"
       ],
       "line_range": [
         1,
@@ -515,13 +515,13 @@
       "source": "client/build.mjs",
       "source_type": "code",
       "location": "chunk_0",
-      "description": "This script orchestrates a client-side build process by running Vitest tests, bundling TypeScript source into a minified JavaScript module using esbuild, and preparing an HTML entry point that imports the bundled logic alongside external SDK dependencies.",
+      "description": "Executes a build pipeline that runs tests, bundles TypeScript client code using esbuild, and prepares HTML assets for distribution.",
       "keywords": [
-        "build automation",
         "esbuild",
+        "build-script",
+        "typescript",
         "vitest",
-        "typescript bundling",
-        "client-side rendering"
+        "automation"
       ],
       "line_range": [
         1,
@@ -534,13 +534,13 @@
       "source": "client/build.mjs",
       "source_type": "code",
       "location": "chunk_1",
-      "description": "This client-side JavaScript module manages a chat interface by rendering user and agent messages, handling streaming responses from an AI service, and updating the UI with loading states and parsed content.",
+      "description": "Implements client-side chat interface logic for displaying messages and streaming responses from an AI agent.",
       "keywords": [
         "chat-interface",
         "streaming-response",
-        "dom-manipulation",
-        "async-handling",
-        "message-rendering"
+        "DOM-manipulation",
+        "client-side",
+        "async"
       ],
       "line_range": [
         51,
@@ -553,13 +553,13 @@
       "source": "client/build.mjs",
       "source_type": "code",
       "location": "chunk_2",
-      "description": "The code handles the finalization of an agent's response by updating the UI, managing conversation state identifiers, and resetting task IDs upon completion, while also defining a function to initiate a new dialogue with a Stoic-themed prompt.",
+      "description": "Processes streaming agent responses to update the UI, manages conversation state by resetting task IDs upon completion, and initializes new dialogues with a Stoic-themed prompt.",
       "keywords": [
-        "event handling",
+        "streaming",
         "UI update",
         "state management",
-        "task reset",
-        "dialogue initialization"
+        "dialogue initialization",
+        "error handling"
       ],
       "line_range": [
         101,
@@ -572,13 +572,13 @@
       "source": "client/build.mjs",
       "source_type": "code",
       "location": "chunk_3",
-      "description": "This code implements a client-side interface for interacting with a 'Stoic Guide' AI agent, handling event stream parsing for status updates and text responses, managing UI loading states, and initializing the connection via a factory pattern.",
+      "description": "Initializes a client connection to a Stoic Guide agent service and handles user input events for chat interactions.",
       "keywords": [
-        "client-side",
-        "event-streaming",
-        "AI-agent",
-        "UI-management",
-        "connection-initialization"
+        "client initialization",
+        "event handling",
+        "chat interface",
+        "Stoic Guide",
+        "asynchronous connection"
       ],
       "line_range": [
         151,
@@ -591,12 +591,12 @@
       "source": "client/build.mjs",
       "source_type": "code",
       "location": "chunk_4",
-      "description": "The code finalizes a build process by injecting a script into an HTML template, writing the output to a distribution directory, and copying the generated assets to a root-level dist folder for serving.",
+      "description": "Finalizes the build process by injecting scripts into HTML, writing the output file, and copying assets to the distribution directory.",
       "keywords": [
         "build",
+        "file-system",
         "asset-copying",
         "html-injection",
-        "file-system-operations",
         "distribution"
       ],
       "line_range": [
@@ -610,14 +610,13 @@
       "source": "client/test/client.test.ts",
       "source_type": "code",
       "location": "chunk_0",
-      "description": "This code defines unit tests for client-side utility functions that sanitize text output by removing specific status markers and extract content from structured event objects.",
+      "description": "Tests utility functions for rendering text by stripping specific status markers and extracting content from event objects.",
       "keywords": [
-        "unit testing",
-        "vitest",
-        "text sanitization",
-        "marker removal",
-        "event parsing",
-        "client-side logic"
+        "testing",
+        "text-processing",
+        "marker-stripping",
+        "event-extraction",
+        "vitest"
       ],
       "line_range": [
         1,
@@ -630,13 +629,13 @@
       "source": "client/test/client.test.ts",
       "source_type": "code",
       "location": "chunk_1",
-      "description": "This code defines unit tests for a function that extracts text content from various event objects, handling different event types and edge cases like missing or empty text parts.",
+      "description": "Tests the extractTextFromEvent function to verify text extraction from various event types and edge cases.",
       "keywords": [
-        "unit testing",
-        "text extraction",
-        "event handling",
-        "edge cases",
-        "Jest"
+        "testing",
+        "text-extraction",
+        "events",
+        "unit-tests",
+        "jest"
       ],
       "line_range": [
         51,
