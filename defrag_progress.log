@@ -1,50 +1,50 @@
-Defrag analysis started: 2026-07-30T23:18:44.510313
+Defrag analysis started: 2026-07-31T11:46:43.783058
 ============================================================
 
-[23:18:44] (+0.0s) Starting semantic analysis on .
-[23:18:44] (+0.0s) Using provider: openai
-[23:18:44] (+0.0s) Using model: Qwen3.6-27B-UD-Q4_K_XL.gguf
-[23:18:44] (+0.0s) Initializing LLM client...
-[23:18:45] (+1.3s) LLM client ready
+[11:46:43] (+0.0s) Starting semantic analysis on .
+[11:46:43] (+0.0s) Using provider: openai
+[11:46:43] (+0.0s) Using model: Qwen3.6-27B-UD-Q4_K_XL.gguf
+[11:46:43] (+0.0s) Initializing LLM client...
+[11:46:44] (+1.2s) LLM client ready
 
 ============================================================
 Step 1: Documentation Analysis
 ============================================================
 
-[23:18:45] (+1.3s) Scanning for documentation files...
-[23:18:45] (+1.3s) Found 6 documentation files
-[23:18:45] (+1.3s) Limiting to 2 docs for testing
-[23:18:45] (+1.3s) Extracting concepts from documentation (LLM calls)...
-[23:19:39] (+55.2s) Extracted 25 doc concepts
+[11:46:44] (+1.2s) Scanning for documentation files...
+[11:46:44] (+1.2s) Found 6 documentation files
+[11:46:44] (+1.2s) Limiting to 2 docs for testing
+[11:46:44] (+1.2s) Extracting concepts from documentation (LLM calls)...
+[11:47:39] (+55.7s) Extracted 25 doc concepts
 
 ============================================================
 Step 2: Intelligent Code Discovery
 ============================================================
 
-[23:19:39] (+55.2s) Using LLM to intelligently discover files...
-[23:20:03] (+78.9s) Found 10 code files
-[23:20:03] (+78.9s) Limiting to 3 files for testing
-[23:20:03] (+78.9s) Extracting concepts from code (LLM calls)...
-[23:20:22] (+98.4s) Extracted 8 code concepts
+[11:47:39] (+55.7s) Using LLM to intelligently discover files...
+[11:48:01] (+78.0s) Found 10 code files
+[11:48:01] (+78.0s) Limiting to 3 files for testing
+[11:48:01] (+78.0s) Extracting concepts from code (LLM calls)...
+[11:48:21] (+97.5s) Extracted 8 code concepts
 
 ============================================================
 Step 3: Concept Matching
 ============================================================
 
-[23:20:22] (+98.4s) Matching 8 code concepts to 25 doc concepts...
-[23:20:22] (+98.4s) (automatic iterative refinement enabled for low-confidence matches)
-[23:20:28] (+103.7s) Found 0 matches (0 high-confidence, 0 refined)
+[11:48:21] (+97.5s) Matching 8 code concepts to 25 doc concepts...
+[11:48:21] (+97.5s) (automatic iterative refinement enabled for low-confidence matches)
+[11:48:26] (+102.8s) Found 0 matches (0 high-confidence, 0 refined)
 
 ============================================================
 Step 4: Physical Link Validation
 ============================================================
 
-[23:20:28] (+103.7s) Validating matches with physical link checker...
-[23:20:28] (+103.7s) Physical validation complete
-[23:20:28] (+103.7s) Saving semantic index...
-[23:20:28] (+103.7s) Index saved to ./semantic_index.json
-[23:20:28] (+103.7s) Analysis complete: 0 matches, 0 high confidence
+[11:48:26] (+102.8s) Validating matches with physical link checker...
+[11:48:26] (+102.8s) Physical validation complete
+[11:48:26] (+102.8s) Saving semantic index...
+[11:48:26] (+102.8s) Index saved to ./semantic_index.json
+[11:48:26] (+102.8s) Analysis complete: 0 matches, 0 high confidence
 
 ============================================================
-Analysis complete! Total time: 103.7s
+Analysis complete! Total time: 102.8s
 ============================================================
